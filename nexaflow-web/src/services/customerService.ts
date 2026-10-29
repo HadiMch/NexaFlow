@@ -1,13 +1,23 @@
 
 import api from './api'
-import type { Customer, CustomerInput } from '../types/customer'
+import type { Customer, CustomerInput, PagedResult, } from '../types/customer'
 
 export const customerService = {
+
+
   // Retrieve customers
-  getAll: async (): Promise<Customer[]> => {
-    const response = await api.get<Customer[]>('/customers')
+  
+  getAll: async (page = 1, pageSize = 10, search = ''): Promise<PagedResult<Customer>> => {
+    const response = await api.get<PagedResult<Customer>>(    
+    '/customers',
+    {
+      params: { page, pageSize, search },
+    }
+    )
     return response.data
   },
+
+
 
   // Retrieve one customer
   getById: async (id: number): Promise<Customer> => {

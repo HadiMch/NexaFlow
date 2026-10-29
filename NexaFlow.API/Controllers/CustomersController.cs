@@ -31,14 +31,43 @@ public async Task<ActionResult<Customer>> GetCustomerById(int id){
 
 
 
+
 [HttpGet]
-public async Task<ActionResult<List<Customer>>> GetCustomers([FromQuery] int page = 1,[FromQuery] int pageSize = 10){
+public async Task<ActionResult<PagedResultDto<Customer>>> GetCustomers(
+    [FromQuery] string? search = null,
+    [FromQuery] int page = 1,
+    [FromQuery] int pageSize = 10)
+{
     if (page < 1 || pageSize < 1 || pageSize > 100)
         return BadRequest("Invalid pagination parameters.");
 
-    return await _context.Customers.AsNoTracking().OrderBy(c => c.Id).Skip((page - 1) * pageSize)
-        .Take(pageSize).ToListAsync();
+    var query = _context.Customers.AsNoTracking();
+
+    if (!string.IsNullOrWhiteSpace(search))
+    {
+        var term = search.Trim();
+
+        query = query.Where(c =>
+            EF.Functions.ILike(c.Name, $"%{term}%"));
+    }
+
+    var totalCount = await query.CountAsync();
+
+    var customers = await query
+        .OrderBy(c => c.Id)
+        .Skip((page - 1) * pageSize)
+        .Take(pageSize)
+        .ToListAsync();
+
+    return Ok(new PagedResultDto<Customer>
+    {
+        Items = customers,
+        TotalCount = totalCount,
+        Page = page,
+        PageSize = pageSize
+    });
 }
+
 
 
 

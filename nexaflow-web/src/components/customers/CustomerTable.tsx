@@ -1,6 +1,5 @@
 
 import type { Customer } from '../../types/customer'
-import { useState } from 'react'
 
 interface CustomerTableProps {
   customers: Customer[]
@@ -15,11 +14,6 @@ function CustomerTable({
   onEdit,
   onDelete,
 }: CustomerTableProps) {
-    const [search, setSearch] = useState('')
-
-    const filteredCustomers = customers.filter((customer) =>
-    customer.name.toLowerCase().includes(search.toLowerCase())
-)
   return (
     <div className="mt-8 rounded-xl bg-white p-6 shadow-sm">
       <h2 className="mb-4 text-xl font-semibold text-slate-900">
@@ -31,13 +25,6 @@ function CustomerTable({
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
-            <input
-            type="search"
-            placeholder="Search customers by name..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="mb-5 w-full rounded-lg border border-slate-300 p-3 text-slate-900 focus:border-indigo-500 focus:outline-none"
-            />
             <thead className="border-b border-slate-200 text-slate-500">
               <tr>
                 <th className="p-3">ID</th>
@@ -49,7 +36,7 @@ function CustomerTable({
             </thead>
 
             <tbody>
-              {filteredCustomers.map((customer) => (
+              {customers.map((customer) => (
                 <tr
                   key={customer.id}
                   className="border-b border-slate-100 hover:bg-slate-50"
@@ -73,6 +60,7 @@ function CustomerTable({
                   <td className="p-3">
                     <div className="flex gap-2">
                       <button
+                        type="button"
                         onClick={() => onEdit(customer)}
                         className="rounded-lg bg-indigo-50 px-4 py-2 text-indigo-600 hover:bg-indigo-100"
                       >
@@ -80,6 +68,7 @@ function CustomerTable({
                       </button>
 
                       <button
+                        type="button"
                         onClick={() => onDelete(customer.id)}
                         disabled={deletingId !== null}
                         className="rounded-lg bg-red-50 px-4 py-2 text-red-600 hover:bg-red-100 disabled:opacity-50"
