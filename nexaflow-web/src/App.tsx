@@ -1,8 +1,9 @@
 
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router'
 import Customers from './pages/Customers'
-import CustomerCountCard from './components/dashboard/CustomerCountCard'
 import Inventory from './pages/Inventory'
+import CustomerCountCard from './components/dashboard/CustomerCountCard'
+import InventoryStatsCards from './components/dashboard/InventoryStatsCards'
 
 const menuItems = [
   { name: 'Dashboard', path: '/' },
@@ -24,21 +25,10 @@ function Dashboard() {
         Welcome to your business management platform.
       </p>
 
-      
       <div className="mt-8 grid gap-6 md:grid-cols-3">
         <CustomerCountCard />
-
-        {['Inventory Items', 'Active Tasks'].map((title) => (
-          <div
-            key={title}
-            className="rounded-xl bg-white p-6 shadow-sm"
-          >
-            <p className="text-sm text-slate-500">{title}</p>
-            <p className="mt-3 text-3xl font-bold text-slate-900">—</p>
-          </div>
-        ))}
+        <InventoryStatsCards />
       </div>
-
     </>
   )
 }
@@ -47,8 +37,12 @@ function App() {
   return (
     <BrowserRouter>
       <div className="flex min-h-screen bg-slate-100">
+
+        {/* Sidebar */}
         <aside className="w-64 shrink-0 bg-slate-900 p-6 text-white">
-          <h1 className="mb-10 text-2xl font-bold">NexaFlow</h1>
+          <h1 className="mb-10 text-2xl font-bold">
+            NexaFlow
+          </h1>
 
           <nav className="space-y-2">
             {menuItems.map((item) => (
@@ -69,6 +63,7 @@ function App() {
           </nav>
         </aside>
 
+        {/* Main Content */}
         <main className="min-w-0 flex-1 p-8">
           <Routes>
             <Route path="/" element={<Dashboard />} />
@@ -84,6 +79,7 @@ function App() {
             />
           </Routes>
         </main>
+
       </div>
     </BrowserRouter>
   )
