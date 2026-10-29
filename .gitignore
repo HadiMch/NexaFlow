@@ -1,0 +1,30 @@
+
+# .NET
+**/bin/
+**/obj/
+**/.vs/
+*.user
+*.suo
+
+# Local secrets and configuration
+**/secrets.json
+**/appsettings.Development.json
+**/.env
+**/.env.*
+!**/.env.example
+
+# React / Node.js
+**/node_modules/
+**/dist/
+**/coverage/
+
+# Flutter (future)
+**/.dart_tool/
+**/build/
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
