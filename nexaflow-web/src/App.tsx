@@ -2,6 +2,7 @@
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router'
 import Customers from './pages/Customers'
 import CustomerCountCard from './components/dashboard/CustomerCountCard'
+import Inventory from './pages/Inventory'
 
 const menuItems = [
   { name: 'Dashboard', path: '/' },
@@ -72,6 +73,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/customers" element={<Customers />} />
+            <Route path="/inventory" element={<Inventory />} />
             <Route
               path="*"
               element={
