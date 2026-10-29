@@ -4,6 +4,7 @@ using NexaFlow.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<ProductService>();
+builder.Services.AddScoped<CustomerActivityService>();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
 );

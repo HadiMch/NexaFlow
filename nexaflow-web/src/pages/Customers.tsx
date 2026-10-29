@@ -4,6 +4,8 @@ import CustomerForm from '../components/customers/CustomerForm'
 import CustomerTable from '../components/customers/CustomerTable'
 import { useCustomers } from '../hooks/useCustomers'
 import type { Customer, CustomerInput } from '../types/customer'
+import CustomerActivitiesPanel from '../components/customerActivities/CustomerActivitiesPanel'
+
 
 function Customers() {
   const {
@@ -23,8 +25,8 @@ function Customers() {
     changeSearch,
   } = useCustomers()
 
-  const [editingCustomer, setEditingCustomer] =
-    useState<Customer | null>(null)
+  const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null)
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null)
 
   async function handleSubmit(data: CustomerInput): Promise<boolean> {
     if (editingCustomer) {
@@ -111,7 +113,16 @@ function Customers() {
             deletingId={deletingId}
             onEdit={handleEdit}
             onDelete={handleDelete}
+            onViewActivities={(customer) => {setSelectedCustomer(customer)}}
           />
+          
+          {selectedCustomer && (
+            <CustomerActivitiesPanel
+             key={selectedCustomer.id}
+             customer={selectedCustomer}
+             onClose={() => setSelectedCustomer(null)}
+            />
+          )}
 
           {/* Pagination */}
           <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
