@@ -6,6 +6,7 @@ interface CustomerTableProps {
   deletingId: number | null
   onEdit: (customer: Customer) => void
   onDelete: (id: number) => void
+  onViewActivities: (customer: Customer) => void
 }
 
 function CustomerTable({
@@ -13,6 +14,7 @@ function CustomerTable({
   deletingId,
   onEdit,
   onDelete,
+  onViewActivities,
 }: CustomerTableProps) {
   return (
     <div className="mt-8 rounded-xl bg-white p-6 shadow-sm">
@@ -59,6 +61,16 @@ function CustomerTable({
 
                   <td className="p-3">
                     <div className="flex gap-2">
+                      
+                      <button
+                        type="button"
+                        onClick={() => onViewActivities(customer)}
+                        className="rounded-lg bg-emerald-50 px-4 py-2 text-emerald-700 hover:bg-emerald-100"
+                      >
+                        Activities
+                      </button>
+                      
+                      
                       <button
                         type="button"
                         onClick={() => onEdit(customer)}

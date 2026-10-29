@@ -53,6 +53,40 @@ namespace NexaFlow.API.Migrations
                     b.ToTable("Customers");
                 });
 
+            modelBuilder.Entity("NexaFlow.API.Models.CustomerActivity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
+
+                    b.Property<DateTime?>("FollowUpDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("CustomerActivities");
+                });
+
             modelBuilder.Entity("NexaFlow.API.Models.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -83,6 +117,22 @@ namespace NexaFlow.API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("NexaFlow.API.Models.CustomerActivity", b =>
+                {
+                    b.HasOne("NexaFlow.API.Models.Customer", "Customer")
+                        .WithMany("Activities")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("NexaFlow.API.Models.Customer", b =>
+                {
+                    b.Navigation("Activities");
                 });
 #pragma warning restore 612, 618
         }

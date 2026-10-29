@@ -13,4 +13,19 @@ public class AppDbContext : DbContext{
     public DbSet<Customer> Customers { get; set; }
 
     public DbSet<Product> Products { get; set; }
+
+    public DbSet<CustomerActivity> CustomerActivities { get; set; } = null!;
+
+    
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+       modelBuilder.Entity<CustomerActivity>()
+            .HasOne(a => a.Customer)
+            .WithMany(c => c.Activities)
+            .HasForeignKey(a => a.CustomerId)
+            .OnDelete(DeleteBehavior.Cascade);
+    }
+
 }
