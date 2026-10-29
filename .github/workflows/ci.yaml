@@ -1,0 +1,56 @@
+
+name: NexaFlow CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  backend:
+    name: Build ASP.NET Core API
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore NexaFlow.API/NexaFlow.API.csproj
+
+      - name: Build backend
+        run: dotnet build NexaFlow.API/NexaFlow.API.csproj --no-restore --configuration Release
+
+  frontend:
+    name: Build React Application
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: nexaflow-web
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: nexaflow-web/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check code quality
+        run: npm run lint
+
+      - name: Build frontend
+        run: npm run build

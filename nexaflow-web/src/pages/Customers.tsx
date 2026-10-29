@@ -67,6 +67,7 @@ function Customers() {
       </p>
 
       <CustomerForm
+        key={editingCustomer?.id ?? 'new'}
         editingCustomer={editingCustomer}
         saving={saving}
         onSubmit={handleSubmit}

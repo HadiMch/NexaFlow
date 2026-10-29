@@ -1,5 +1,5 @@
 
-import { useEffect, useState, type FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import type { Customer, CustomerInput } from '../../types/customer'
 
 interface CustomerFormProps {
@@ -15,17 +15,10 @@ function CustomerForm({
   onSubmit,
   onCancel,
 }: CustomerFormProps) {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [phone, setPhone] = useState('')
+  const [name, setName] = useState(editingCustomer?.name ?? '')  
+  const [email, setEmail] = useState(editingCustomer?.email ?? '')
+  const [phone, setPhone] = useState(editingCustomer?.phone ?? '')
   const [error, setError] = useState('')
-
-  useEffect(() => {
-    setName(editingCustomer?.name ?? '')
-    setEmail(editingCustomer?.email ?? '')
-    setPhone(editingCustomer?.phone ?? '')
-    setError('')
-  }, [editingCustomer])
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
