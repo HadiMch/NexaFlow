@@ -1,6 +1,6 @@
 
 import api from './api'
-import type { Product, ProductInput } from '../types/product'
+import type { Product, ProductInput, InventoryStats,} from '../types/product'
 
 export const productService = {
  
@@ -15,6 +15,13 @@ export const productService = {
   // Get a product by ID
   getById: async (id: number): Promise<Product> => {
     const response = await api.get<Product>(`/products/${id}`)
+    return response.data
+  },
+
+
+  
+  getStats: async (): Promise<InventoryStats> => {
+    const response = await api.get<InventoryStats>('/products/stats')
     return response.data
   },
 

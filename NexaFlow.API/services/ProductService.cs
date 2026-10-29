@@ -64,4 +64,20 @@ public class ProductService{
 
         return true;
     }
+
+    
+    public async Task<InventoryStatsDto> GetInventoryStatsAsync(){
+        var products = _context.Products.AsNoTracking();
+
+        return new InventoryStatsDto
+        {
+            TotalProducts = await products.CountAsync(),
+
+            TotalStockQuantity = await products.SumAsync(p => (long)p.Quantity),
+            LowStockProducts = await products.CountAsync(p => p.Quantity <= 5),
+
+            TotalInventoryValue = await products.SumAsync(p => p.Price * p.Quantity)
+        };
+    }
+
 }

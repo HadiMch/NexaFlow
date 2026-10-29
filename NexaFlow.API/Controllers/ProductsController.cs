@@ -31,6 +31,8 @@ public class ProductsController : ControllerBase{
 
         return Ok(product);
     }
+
+
     [HttpPost]
     public async Task<ActionResult<Product>> CreateProduct([FromBody] CreateProductDto dto){
         var product = await _productService.CreateAsync(dto);
@@ -63,4 +65,13 @@ public class ProductsController : ControllerBase{
 
         return NoContent();
     }
+
+    
+    [HttpGet("stats")]
+    public async Task<ActionResult<InventoryStatsDto>> GetInventoryStats()
+    {
+        var stats = await _productService.GetInventoryStatsAsync();
+     return Ok(stats);
+    }
+
 }
