@@ -5,53 +5,59 @@ import type { Customer, CustomerInput } from '../types/customer'
 
 export function useCustomers() {
   const [customers, setCustomers] = useState<Customer[]>([])
+  const [page, setPage] = useState(1)
+  const [pageSize] = useState(10)
+  const [search, setSearch] = useState('')
+  const [totalCount, setTotalCount] = useState(0)
+  const [totalPages, setTotalPages] = useState(0)
+
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [saving, setSaving] = useState(false)
   const [deletingId, setDeletingId] = useState<number | null>(null)
+  const [refreshKey, setRefreshKey] = useState(0)
 
   const fetchCustomers = useCallback(async () => {
-    setLoading(true)
-    setError('')
-
-    try {
-      const data = await customerService.getAll()
-      setCustomers(data)
-    } catch {
-      setError('Failed to load customers.')
-    } finally {
-      setLoading(false)
-    }
+    setRefreshKey((previous) => previous + 1)
   }, [])
 
   useEffect(() => {
     let active = true
 
-    async function loadCustomers() {
-      try {
-        const data = await customerService.getAll()
-        if (active) setCustomers(data)
+    const timeout = setTimeout(async () => {
+      if (active) setLoading(true)
+      
+        try {
+        const result = await customerService.getAll(
+          page,
+          pageSize,
+          search
+        )
+
+        if (active) {
+          setCustomers(result.items)
+          setTotalCount(result.totalCount)
+          setTotalPages(result.totalPages)
+          setError('')
+        }
       } catch {
         if (active) setError('Failed to load customers.')
       } finally {
         if (active) setLoading(false)
       }
-    }
-
-    loadCustomers()
+    }, search ? 300 : 0)
 
     return () => {
       active = false
+      clearTimeout(timeout)
     }
-  }, [])
+  }, [page, pageSize, search, refreshKey])
 
-  const addCustomer = async (data: CustomerInput) => {
+  const addCustomer = async (data: CustomerInput): Promise<boolean> => {
     setSaving(true)
-
     try {
-      const customer = await customerService.create(data)
-
-      setCustomers((prev) => [...prev, customer])
+      await customerService.create(data)
+      await fetchCustomers()
       return true
     } catch {
       return false
@@ -60,9 +66,11 @@ export function useCustomers() {
     }
   }
 
-  const updateCustomer = async (id: number, data: CustomerInput) => {
+  const updateCustomer = async (
+    id: number,
+    data: CustomerInput
+  ): Promise<boolean> => {
     setSaving(true)
-
     try {
       await customerService.update(id, data)
       await fetchCustomers()
@@ -74,15 +82,16 @@ export function useCustomers() {
     }
   }
 
-  const deleteCustomer = async (id: number) => {
+  const deleteCustomer = async (id: number): Promise<boolean> => {
     setDeletingId(id)
-
     try {
       await customerService.delete(id)
 
-      setCustomers((prev) =>
-        prev.filter((customer) => customer.id !== id)
-      )
+      if (customers.length === 1 && page > 1) {
+        setPage(page - 1)
+      } else {
+        await fetchCustomers()
+      }
 
       return true
     } catch {
@@ -92,12 +101,24 @@ export function useCustomers() {
     }
   }
 
+  const changeSearch = (value: string) => {
+    setSearch(value)
+    setPage(1)
+  }
+
   return {
     customers,
     loading,
     error,
     saving,
     deletingId,
+    page,
+    pageSize,
+    search,
+    totalCount,
+    totalPages,
+    setPage,
+    changeSearch,
     fetchCustomers,
     addCustomer,
     updateCustomer,

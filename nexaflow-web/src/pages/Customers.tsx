@@ -15,9 +15,16 @@ function Customers() {
     addCustomer,
     updateCustomer,
     deleteCustomer,
+    page,
+    search,
+    totalCount,
+    totalPages,
+    setPage,
+    changeSearch,
   } = useCustomers()
 
-  const [editingCustomer, setEditingCustomer] = useState<Customer | null>(null)
+  const [editingCustomer, setEditingCustomer] =
+    useState<Customer | null>(null)
 
   async function handleSubmit(data: CustomerInput): Promise<boolean> {
     if (editingCustomer) {
@@ -33,9 +40,10 @@ function Customers() {
     return await addCustomer(data)
   }
 
-
   async function handleDelete(id: number) {
-    const confirmed = window.confirm('Are you sure you want to delete this customer?')
+    const confirmed = window.confirm(
+      'Are you sure you want to delete this customer?'
+    )
 
     if (!confirmed) return
 
@@ -50,7 +58,6 @@ function Customers() {
     }
   }
 
-  
   function handleEdit(customer: Customer) {
     setEditingCustomer(customer)
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -58,6 +65,7 @@ function Customers() {
 
   return (
     <div>
+      {/* Page Header */}
       <h1 className="text-3xl font-bold text-slate-900">
         Customers
       </h1>
@@ -66,6 +74,7 @@ function Customers() {
         Manage your business customers here.
       </p>
 
+      {/* Add / Edit Form */}
       <CustomerForm
         key={editingCustomer?.id ?? 'new'}
         editingCustomer={editingCustomer}
@@ -74,6 +83,19 @@ function Customers() {
         onCancel={() => setEditingCustomer(null)}
       />
 
+      {/* Search */}
+      <div className="mt-8 rounded-xl bg-white p-4 shadow-sm">
+        <input
+          type="search"
+          value={search}
+          onChange={(e) => changeSearch(e.target.value)}
+          placeholder="Search customers by name..."
+          aria-label="Search customers by name"
+          className="w-full rounded-lg border border-slate-300 p-3 text-slate-900 focus:border-indigo-500 focus:outline-none"
+        />
+      </div>
+
+      {/* Customer Results */}
       {loading ? (
         <p className="mt-8 text-slate-500">
           Loading customers...
@@ -83,12 +105,45 @@ function Customers() {
           {error}
         </p>
       ) : (
-        <CustomerTable
-          customers={customers}
-          deletingId={deletingId}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
+        <>
+          <CustomerTable
+            customers={customers}
+            deletingId={deletingId}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+          />
+
+          {/* Pagination */}
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-4">
+            <p className="text-sm text-slate-600">
+              {totalCount} customer(s) found
+            </p>
+
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                disabled={page <= 1 || loading}
+                onClick={() => setPage(page - 1)}
+                className="rounded-lg border bg-white px-4 py-2 disabled:opacity-40"
+              >
+                Previous
+              </button>
+
+              <span className="text-sm text-slate-700">
+                Page {page} of {Math.max(totalPages, 1)}
+              </span>
+
+              <button
+                type="button"
+                disabled={page >= totalPages || loading}
+                onClick={() => setPage(page + 1)}
+                className="rounded-lg border bg-white px-4 py-2 disabled:opacity-40"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        </>
       )}
     </div>
   )
