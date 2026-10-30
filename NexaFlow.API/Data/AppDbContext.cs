@@ -15,6 +15,8 @@ public class AppDbContext : DbContext{
     public DbSet<Product> Products { get; set; }
 
     public DbSet<CustomerActivity> CustomerActivities { get; set; } = null!;
+    
+    public DbSet<BusinessTask> BusinessTasks { get; set; } = null!;
 
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
