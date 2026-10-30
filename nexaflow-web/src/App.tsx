@@ -2,8 +2,10 @@
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router'
 import Customers from './pages/Customers'
 import Inventory from './pages/Inventory'
+import Tasks from './pages/Tasks'
 import CustomerCountCard from './components/dashboard/CustomerCountCard'
 import InventoryStatsCards from './components/dashboard/InventoryStatsCards'
+import BusinessTaskStatsCards from './components/dashboard/BusinessTaskStatsCards'
 
 const menuItems = [
   { name: 'Dashboard', path: '/' },
@@ -16,7 +18,8 @@ const menuItems = [
 
 function Dashboard() {
   return (
-    <>
+    <div>
+      {/* Dashboard Header */}
       <h2 className="text-3xl font-bold text-slate-900">
         Dashboard
       </h2>
@@ -25,13 +28,26 @@ function Dashboard() {
         Welcome to your business management platform.
       </p>
 
-      <div className="mt-8 grid gap-6 md:grid-cols-3">
-        <CustomerCountCard />
-        <InventoryStatsCards />
-      </div>
-    </>
+
+      {/* Business Overview */}
+      <section className="mt-8">
+        <h3 className="mb-4 text-xl font-semibold text-slate-900">
+          Business Overview
+        </h3>
+
+        <div className="grid gap-6 md:grid-cols-3">
+          <CustomerCountCard />
+          <InventoryStatsCards />
+        </div>
+      </section>
+
+
+      {/* Task Overview - Full Width */}
+      <BusinessTaskStatsCards />
+    </div>
   )
 }
+
 
 function App() {
   return (
@@ -63,12 +79,15 @@ function App() {
           </nav>
         </aside>
 
+
         {/* Main Content */}
         <main className="min-w-0 flex-1 p-8">
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/customers" element={<Customers />} />
             <Route path="/inventory" element={<Inventory />} />
+            <Route path="/tasks" element={<Tasks />} />
+
             <Route
               path="*"
               element={
