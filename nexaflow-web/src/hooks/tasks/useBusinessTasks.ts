@@ -16,14 +16,18 @@ export function useBusinessTasks() {
   const [deletingId, setDeletingId] = useState<number | null>(null)
   const [refreshKey, setRefreshKey] = useState(0)
 
+  // Trigger task list refresh
   const refreshTasks = useCallback(() => {
     setRefreshKey((previous) => previous + 1)
   }, [])
 
+  // Load tasks when mounted or refreshed
   useEffect(() => {
     let active = true
 
     async function loadTasks() {
+      if (!active) return
+
       setLoading(true)
 
       try {
@@ -48,13 +52,13 @@ export function useBusinessTasks() {
       void loadTasks()
     }, 0)
 
-    clearTimeout(timeout)
-    
     return () => {
       active = false
+      clearTimeout(timeout)
     }
   }, [refreshKey])
 
+  // Create task
   const addTask = async (
     data: CreateBusinessTaskInput
   ): Promise<boolean> => {
@@ -65,13 +69,13 @@ export function useBusinessTasks() {
       refreshTasks()
       return true
     } catch {
-      setError('Failed to create task.')
       return false
     } finally {
       setSaving(false)
     }
   }
 
+  // Update task
   const updateTask = async (
     id: number,
     data: UpdateBusinessTaskInput
@@ -83,13 +87,13 @@ export function useBusinessTasks() {
       refreshTasks()
       return true
     } catch {
-      setError('Failed to update task.')
       return false
     } finally {
       setSaving(false)
     }
   }
 
+  // Delete task
   const deleteTask = async (id: number): Promise<boolean> => {
     setDeletingId(id)
 
@@ -98,7 +102,6 @@ export function useBusinessTasks() {
       refreshTasks()
       return true
     } catch {
-      setError('Failed to delete task.')
       return false
     } finally {
       setDeletingId(null)
