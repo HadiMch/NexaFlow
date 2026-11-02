@@ -7,7 +7,7 @@ import CustomerCountCard from './components/dashboard/CustomerCountCard'
 import InventoryStatsCards from './components/dashboard/InventoryStatsCards'
 import BusinessTaskStatsCards from './components/dashboard/BusinessTaskStatsCards'
 import Analytics from './pages/Analytics'
-
+import AiAssistant from './pages/AiAssistant'
 
 const menuItems = [
   { name: 'Dashboard', path: '/' },
@@ -90,6 +90,7 @@ function App() {
             <Route path="/inventory" element={<Inventory />} />
             <Route path="/tasks" element={<Tasks />} />
             <Route path="/analytics" element={<Analytics />} />
+            <Route path="/ai-assistant" element={<AiAssistant />} />
             <Route
               path="*"
               element={
