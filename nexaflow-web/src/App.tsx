@@ -6,6 +6,8 @@ import Tasks from './pages/Tasks'
 import CustomerCountCard from './components/dashboard/CustomerCountCard'
 import InventoryStatsCards from './components/dashboard/InventoryStatsCards'
 import BusinessTaskStatsCards from './components/dashboard/BusinessTaskStatsCards'
+import Analytics from './pages/Analytics'
+
 
 const menuItems = [
   { name: 'Dashboard', path: '/' },
@@ -87,7 +89,7 @@ function App() {
             <Route path="/customers" element={<Customers />} />
             <Route path="/inventory" element={<Inventory />} />
             <Route path="/tasks" element={<Tasks />} />
-
+            <Route path="/analytics" element={<Analytics />} />
             <Route
               path="*"
               element={

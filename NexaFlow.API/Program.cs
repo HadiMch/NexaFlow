@@ -8,6 +8,8 @@ builder.Services.AddScoped<CustomerActivityService>();
 builder.Services.AddDbContext<AppDbContext>(options =>options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<BusinessTaskService>();
 builder.Services.AddScoped<BusinessTaskStatsService>();
+builder.Services.AddScoped<AnalyticsService>();
+builder.Services.AddScoped<TaskTrendService>();
 
 // Add services to the container.
 builder.Services.AddControllers();
