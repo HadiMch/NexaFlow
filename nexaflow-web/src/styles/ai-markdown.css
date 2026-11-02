@@ -1,0 +1,178 @@
+
+.nexa-markdown {
+  color: inherit;
+  font-size: 0.9rem;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+.nexa-markdown > :first-child {
+  margin-top: 0;
+}
+
+.nexa-markdown > :last-child {
+  margin-bottom: 0;
+}
+
+.nexa-markdown p {
+  margin: 0.75rem 0;
+}
+
+.nexa-markdown h1,
+.nexa-markdown h2,
+.nexa-markdown h3,
+.nexa-markdown h4 {
+  color: #0f172a;
+  font-weight: 700;
+  line-height: 1.4;
+  margin: 1.25rem 0 0.6rem;
+  letter-spacing: -0.02em;
+}
+
+.nexa-markdown h1 {
+  font-size: 1.5rem;
+}
+
+.nexa-markdown h2 {
+  font-size: 1.25rem;
+}
+
+.nexa-markdown h3 {
+  font-size: 1.1rem;
+}
+
+.nexa-markdown h4 {
+  font-size: 1rem;
+}
+
+.nexa-markdown strong {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.nexa-markdown ul,
+.nexa-markdown ol {
+  margin: 0.8rem 0;
+  padding-left: 1.6rem;
+}
+
+.nexa-markdown ul {
+  list-style-type: disc;
+}
+
+.nexa-markdown ol {
+  list-style-type: decimal;
+}
+
+.nexa-markdown li {
+  padding-left: 0.2rem;
+  margin: 0.35rem 0;
+}
+
+.nexa-markdown li > p {
+  margin: 0.25rem 0;
+}
+
+.nexa-markdown blockquote {
+  border-left: 3px solid #6366f1;
+  padding: 0.65rem 1rem;
+  margin: 1rem 0;
+  background: #eef2ff;
+  border-radius: 0 0.6rem 0.6rem 0;
+  color: #475569;
+}
+
+.nexa-markdown a {
+  color: #4f46e5;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.nexa-markdown a:hover {
+  color: #3730a3;
+}
+
+.nexa-markdown hr {
+  border: 0;
+  border-top: 1px solid #e2e8f0;
+  margin: 1.5rem 0;
+}
+
+/* Inline code */
+.nexa-markdown :not(pre) > code {
+  padding: 0.15rem 0.4rem;
+  background: #eef2ff;
+  border-radius: 0.35rem;
+  color: #4338ca;
+  font-size: 0.85em;
+  font-weight: 500;
+}
+
+/* Code blocks */
+.nexa-markdown pre {
+  background: #0f172a;
+  color: #e2e8f0;
+  border-radius: 0.85rem;
+  padding: 1rem 1.15rem;
+  margin: 1rem 0;
+  overflow-x: auto;
+  max-width: 100%;
+  font-size: 0.82rem;
+  line-height: 1.7;
+  border: 1px solid #1e293b;
+}
+
+.nexa-markdown pre code {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  white-space: pre;
+  font-size: inherit;
+}
+
+/* Tables */
+.nexa-markdown table {
+  border-collapse: collapse;
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 1rem 0;
+  font-size: 0.83rem;
+  line-height: 1.6;
+}
+
+.nexa-markdown th,
+.nexa-markdown td {
+  border: 1px solid #e2e8f0;
+  padding: 0.7rem 0.9rem;
+  text-align: left;
+  vertical-align: top;
+  min-width: 100px;
+}
+
+.nexa-markdown th {
+  background: #f1f5f9;
+  color: #334155;
+  font-weight: 700;
+}
+
+.nexa-markdown tbody tr:nth-child(even) {
+  background: #f8fafc;
+}
+
+.nexa-markdown tbody tr:hover {
+  background: #f1f5f9;
+}
+
+.nexa-markdown img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.6rem;
+}
+
+.nexa-markdown input[type="checkbox"] {
+  margin-right: 0.5rem;
+  accent-color: #4f46e5;
+}

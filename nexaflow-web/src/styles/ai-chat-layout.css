@@ -1,0 +1,123 @@
+
+/* Resizable NexaFlow chat workspace */
+
+
+/* Main resizable chat panel */
+
+.nexa-chat-panel {
+  width: 100%;
+  height: min(78dvh, 720px);
+  min-height: 480px;
+  max-width: 100%;
+}
+
+@media (min-width: 768px) {
+  .nexa-chat-panel {
+    width: min(100%, var(--chat-width, 1100px));
+    height: var(--chat-height, 850px);
+    min-height: 580px;
+    max-height: 1400px;
+  }
+}
+
+/* Keep suggested questions on one horizontal line */
+
+.nexa-chat-panel .nexa-suggestions {
+  flex-wrap: nowrap;
+  width: max-content;
+  min-width: max-content;
+}
+
+.nexa-chat-panel .nexa-suggestions button {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+
+.nexa-resize-handle {
+  position: absolute;
+  z-index: 20;
+  border: 0;
+  background: transparent;
+  touch-action: none;
+}
+
+.nexa-resize-right {
+  right: -5px;
+  top: 15%;
+  height: 70%;
+  width: 12px;
+  cursor: ew-resize;
+}
+
+.nexa-resize-bottom {
+  bottom: -5px;
+  left: 15%;
+  width: 70%;
+  height: 12px;
+  cursor: ns-resize;
+}
+
+.nexa-resize-corner {
+  right: 0;
+  bottom: 0;
+  width: 24px;
+  height: 24px;
+  cursor: nwse-resize;
+}
+
+.nexa-resize-right::after,
+.nexa-resize-bottom::after {
+  content: "";
+  position: absolute;
+  background: #c7d2fe;
+  border-radius: 999px;
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+
+.nexa-resize-right::after {
+  width: 3px;
+  height: 45px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.nexa-resize-bottom::after {
+  width: 45px;
+  height: 3px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.nexa-resize-right:hover::after,
+.nexa-resize-bottom:hover::after,
+.nexa-resize-handle:focus-visible::after {
+  opacity: 1;
+}
+
+.nexa-resize-corner::after {
+  content: "";
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  width: 10px;
+  height: 10px;
+  border-right: 2px solid #818cf8;
+  border-bottom: 2px solid #818cf8;
+  border-radius: 0 0 3px 0;
+}
+
+@media (max-width: 767px) {
+  .nexa-resize-handle {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nexa-resize-handle::after {
+    transition: none;
+  }
+}
