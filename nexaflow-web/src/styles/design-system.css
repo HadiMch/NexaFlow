@@ -1,0 +1,68 @@
+
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+
+  --nf-primary: #4f46e5;
+  --nf-primary-hover: #4338ca;
+  --nf-primary-soft: #eef2ff;
+
+  --nf-background: #f7f9fc;
+  --nf-surface: #ffffff;
+  --nf-surface-muted: #f8fafc;
+
+  --nf-text: #0f172a;
+  --nf-text-secondary: #475569;
+  --nf-text-muted: #64748b;
+
+  --nf-border: #e2e8f0;
+  --nf-border-soft: #f1f5f9;
+
+  --nf-success: #059669;
+  --nf-warning: #d97706;
+  --nf-danger: #dc2626;
+
+  --nf-radius-sm: 0.5rem;
+  --nf-radius-md: 0.75rem;
+  --nf-radius-lg: 1rem;
+  --nf-radius-xl: 1.25rem;
+
+  --nf-shadow-card:
+    0 2px 8px rgb(15 23 42 / 0.03),
+    0 10px 30px rgb(15 23 42 / 0.03);
+
+  --nf-focus-ring: 0 0 0 3px rgb(99 102 241 / 0.18);
+}
+
+.nf-surface {
+  background: var(--nf-surface);
+  border: 1px solid var(--nf-border);
+  border-radius: var(--nf-radius-lg);
+  box-shadow: var(--nf-shadow-card);
+}
+
+.nf-focusable:focus-visible {
+  outline: 2px solid var(--nf-primary);
+  outline-offset: 2px;
+}
+
+.nf-section-title {
+  color: var(--nf-text);
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.5;
+}
+
+.nf-section-description {
+  margin-top: 0.25rem;
+  color: var(--nf-text-muted);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nf-motion {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

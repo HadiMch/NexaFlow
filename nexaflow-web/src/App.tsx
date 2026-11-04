@@ -1,110 +1,82 @@
 
-import { BrowserRouter, NavLink, Route, Routes } from 'react-router'
+import {
+  BrowserRouter,
+  Link,
+  Route,
+  Routes,
+} from 'react-router'
+
+import AppLayout from './components/layout/AppLayout'
+
+import Dashboard from './pages/Dashboard'
 import Customers from './pages/Customers'
 import Inventory from './pages/Inventory'
 import Tasks from './pages/Tasks'
-import CustomerCountCard from './components/dashboard/CustomerCountCard'
-import InventoryStatsCards from './components/dashboard/InventoryStatsCards'
-import BusinessTaskStatsCards from './components/dashboard/BusinessTaskStatsCards'
 import Analytics from './pages/Analytics'
 import AiAssistant from './pages/AiAssistant'
 
-const menuItems = [
-  { name: 'Dashboard', path: '/' },
-  { name: 'Customers', path: '/customers' },
-  { name: 'Inventory', path: '/inventory' },
-  { name: 'Employees & Tasks', path: '/tasks' },
-  { name: 'Analytics', path: '/analytics' },
-  { name: 'AI Assistant', path: '/ai-assistant' },
-]
+import './styles/design-system.css'
 
-function Dashboard() {
+function NotFound() {
   return (
-    <div>
-      {/* Dashboard Header */}
-      <h2 className="text-3xl font-bold text-slate-900">
-        Dashboard
+    <div className="flex min-h-[60vh] flex-col items-center justify-center text-center">
+      <h1 className="text-6xl font-bold text-indigo-600">
+        404
+      </h1>
+
+      <h2 className="mt-4 text-2xl font-bold text-slate-900">
+        Page not found
       </h2>
 
-      <p className="mt-2 text-slate-500">
-        Welcome to your business management platform.
+      <p className="mt-2 text-sm text-slate-500">
+        The page you're looking for doesn't exist.
       </p>
 
-
-      {/* Business Overview */}
-      <section className="mt-8">
-        <h3 className="mb-4 text-xl font-semibold text-slate-900">
-          Business Overview
-        </h3>
-
-        <div className="grid gap-6 md:grid-cols-3">
-          <CustomerCountCard />
-          <InventoryStatsCards />
-        </div>
-      </section>
-
-
-      {/* Task Overview - Full Width */}
-      <BusinessTaskStatsCards />
+      <Link
+        to="/"
+        className="nf-motion mt-6 rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+      >
+        Back to Dashboard
+      </Link>
     </div>
   )
 }
 
-
-function App() {
+export default function App() {
   return (
     <BrowserRouter>
-      <div className="flex min-h-screen bg-slate-100">
+      <Routes>
+        <Route element={<AppLayout />}>
+          <Route index element={<Dashboard />} />
 
-        {/* Sidebar */}
-        <aside className="w-64 shrink-0 bg-slate-900 p-6 text-white">
-          <h1 className="mb-10 text-2xl font-bold">
-            NexaFlow
-          </h1>
+          <Route
+            path="/customers"
+            element={<Customers />}
+          />
 
-          <nav className="space-y-2">
-            {menuItems.map((item) => (
-              <NavLink
-                key={item.path}
-                to={item.path}
-                className={({ isActive }) =>
-                  `block rounded-lg px-4 py-3 ${
-                    isActive
-                      ? 'bg-indigo-600 text-white'
-                      : 'text-slate-300 hover:bg-slate-800'
-                  }`
-                }
-              >
-                {item.name}
-              </NavLink>
-            ))}
-          </nav>
-        </aside>
+          <Route
+            path="/inventory"
+            element={<Inventory />}
+          />
 
+          <Route
+            path="/tasks"
+            element={<Tasks />}
+          />
 
-        {/* Main Content */}
-        <main className="min-w-0 flex-1 p-8">
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/customers" element={<Customers />} />
-            <Route path="/inventory" element={<Inventory />} />
-            <Route path="/tasks" element={<Tasks />} />
-            <Route path="/analytics" element={<Analytics />} />
-            <Route path="/ai-assistant" element={<AiAssistant />} />
-            <Route
-              path="*"
-              element={
-                <h2 className="text-2xl font-bold text-slate-900">
-                  Page coming soon
-                </h2>
-              }
-            />
-          </Routes>
-        </main>
+          <Route
+            path="/analytics"
+            element={<Analytics />}
+          />
 
-      </div>
+          <Route
+            path="/ai-assistant"
+            element={<AiAssistant />}
+          />
+
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
     </BrowserRouter>
   )
 }
-
-export default App
