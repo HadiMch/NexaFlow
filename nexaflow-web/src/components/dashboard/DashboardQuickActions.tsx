@@ -16,21 +16,21 @@ const quickActions = [
     description: 'View and manage customer records.',
     path: '/customers',
     icon: UsersRound,
-    color: 'bg-indigo-50 text-indigo-600',
+    tone: 'indigo',
   },
   {
     title: 'Manage Inventory',
     description: 'Review products and stock levels.',
     path: '/inventory',
     icon: Boxes,
-    color: 'bg-sky-50 text-sky-600',
+    tone: 'blue',
   },
   {
     title: 'Manage Tasks',
     description: 'Organize tasks and track progress.',
     path: '/tasks',
     icon: ClipboardCheck,
-    color: 'bg-violet-50 text-violet-600',
+    tone: 'violet',
   },
 ]
 
@@ -40,12 +40,12 @@ export default function DashboardQuickActions() {
       <div className="mb-5">
         <h2
           id="quick-access-title"
-          className="text-lg font-bold tracking-tight text-slate-900"
+          className="nf-section-title"
         >
           Quick Access
         </h2>
 
-        <p className="mt-1 text-sm text-slate-500">
+        <p className="nf-section-description">
           Navigate directly to your everyday workflows.
         </p>
       </div>
@@ -60,25 +60,26 @@ export default function DashboardQuickActions() {
               to={action.path}
               className="group block rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
             >
-              <Card className="h-full transition-all duration-200 group-hover:-translate-y-0.5 group-hover:border-indigo-200 group-hover:shadow-lg">
+              <Card
+                data-tone={action.tone}
+                className="nf-stat-card nf-motion h-full group-hover:-translate-y-0.5"
+              >
                 <div className="flex items-start justify-between gap-3">
-                  <div
-                    className={`flex h-12 w-12 items-center justify-center rounded-xl ${action.color}`}
-                  >
+                  <div className="nf-stat-icon flex h-12 w-12 items-center justify-center rounded-xl">
                     <Icon size={23} />
                   </div>
 
                   <ArrowRight
                     size={18}
-                    className="text-slate-400 transition group-hover:translate-x-1 group-hover:text-indigo-600"
+                    className="nf-text-muted nf-motion group-hover:translate-x-1"
                   />
                 </div>
 
-                <h3 className="mt-5 text-base font-bold text-slate-900">
+                <h3 className="nf-text-primary mt-5 text-base font-bold">
                   {action.title}
                 </h3>
 
-                <p className="mt-2 text-sm leading-6 text-slate-500">
+                <p className="nf-text-muted mt-2 text-sm leading-6">
                   {action.description}
                 </p>
               </Card>

@@ -9,18 +9,15 @@ const SIDEBAR_STORAGE_KEY = 'nexaflow-sidebar-collapsed'
 
 function loadSidebarPreference(): boolean {
   try {
-    return (
-      localStorage.getItem(SIDEBAR_STORAGE_KEY) === 'true'
-    )
+    return localStorage.getItem(SIDEBAR_STORAGE_KEY) === 'true'
   } catch {
     return false
   }
 }
 
 export default function AppLayout() {
-  const [collapsed, setCollapsed] = useState(
-    loadSidebarPreference
-  )
+  const [collapsed, setCollapsed] =
+    useState(loadSidebarPreference)
 
   const [mobileOpen, setMobileOpen] = useState(false)
   const location = useLocation()
@@ -32,7 +29,7 @@ export default function AppLayout() {
         String(collapsed)
       )
     } catch {
-      // Sidebar remains functional without storage.
+      // Sidebar still works without browser storage.
     }
   }, [collapsed])
 
@@ -63,21 +60,18 @@ export default function AppLayout() {
     }
   }, [mobileOpen])
 
-  function toggleSidebar() {
-    setCollapsed((previous) => !previous)
-  }
-
-  function closeMobileMenu() {
-    setMobileOpen(false)
-  }
-
   return (
-    <div className="flex min-h-screen bg-[#F7F9FC]">
+    <div
+      className="flex min-h-screen"
+      style={{ background: 'var(--nf-background)' }}
+    >
       <Sidebar
         collapsed={collapsed}
         mobileOpen={mobileOpen}
-        onToggleCollapse={toggleSidebar}
-        onCloseMobile={closeMobileMenu}
+        onToggleCollapse={() =>
+          setCollapsed((previous) => !previous)
+        }
+        onCloseMobile={() => setMobileOpen(false)}
       />
 
       <div className="flex min-h-screen min-w-0 flex-1 flex-col">
@@ -87,14 +81,20 @@ export default function AppLayout() {
 
         <main
           key={location.pathname}
-          className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-8 lg:py-8"
+          className="nf-page min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-8 lg:py-8"
         >
           <div className="mx-auto w-full max-w-[1600px]">
             <Outlet />
           </div>
         </main>
 
-        <footer className="border-t border-slate-200/70 px-4 py-4 text-center text-xs text-slate-400 sm:px-6 lg:px-8">
+        <footer
+          className="border-t px-4 py-4 text-center text-xs sm:px-6 lg:px-8"
+          style={{
+            color: 'var(--nf-text-muted)',
+            borderColor: 'var(--nf-border)',
+          }}
+        >
           NexaFlow · Business Management Platform
         </footer>
       </div>

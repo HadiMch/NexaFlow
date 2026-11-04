@@ -30,30 +30,34 @@ export default function Input({
   const errorId = `${inputId}-error`
   const helperId = `${inputId}-helper`
 
-  const descriptionId = error
-    ? errorId
-    : helperText
-      ? helperId
-      : undefined
+  const descriptionId = [
+    error ? errorId : null,
+    helperText ? helperId : null,
+  ].filter(Boolean).join(' ') || undefined
 
   return (
     <div className="w-full space-y-1.5">
       {label && (
         <label
           htmlFor={inputId}
-          className="block text-sm font-semibold text-slate-700"
+          className="nf-text-secondary block text-sm font-semibold"
         >
           {label}
 
           {required && (
-            <span className="ml-1 text-red-500">*</span>
+            <span
+              className="ml-1"
+              style={{ color: 'var(--nf-danger)' }}
+            >
+              *
+            </span>
           )}
         </label>
       )}
 
       <div className="relative">
         {leadingIcon && (
-          <span className="pointer-events-none absolute inset-y-0 left-3 flex items-center text-slate-400">
+          <span className="nf-text-muted pointer-events-none absolute inset-y-0 left-3 flex items-center">
             {leadingIcon}
           </span>
         )}
@@ -65,42 +69,36 @@ export default function Input({
           aria-invalid={Boolean(error)}
           aria-describedby={descriptionId}
           className={`
-            nf-motion w-full min-h-11 rounded-xl
-            border bg-white px-3.5 py-2.5
-            text-sm text-slate-900
-            outline-none transition-colors
-            placeholder:text-slate-400
-            focus:ring-2
-            disabled:cursor-not-allowed
-            disabled:bg-slate-100
-            disabled:text-slate-500
-            ${
-              error
-                ? 'border-red-400 focus:border-red-500 focus:ring-red-100'
-                : 'border-slate-200 focus:border-indigo-500 focus:ring-indigo-100'
-            }
+            nf-input nf-motion
+            w-full min-h-11 rounded-xl border
+            px-3.5 py-2.5 text-sm outline-none
+            disabled:cursor-not-allowed disabled:opacity-60
             ${leadingIcon ? 'pl-10' : ''}
+            ${error ? 'nf-input-error' : ''}
             ${className}
           `}
         />
       </div>
 
-      {error ? (
+      {error && (
         <p
           id={errorId}
           role="alert"
-          className="text-xs text-red-600"
+          className="text-xs"
+          style={{ color: 'var(--nf-danger)' }}
         >
           {error}
         </p>
-      ) : helperText ? (
+      )}
+
+      {helperText && (
         <p
           id={helperId}
-          className="text-xs text-slate-500"
+          className="nf-text-muted text-xs"
         >
           {helperText}
         </p>
-      ) : null}
+      )}
     </div>
   )
 }

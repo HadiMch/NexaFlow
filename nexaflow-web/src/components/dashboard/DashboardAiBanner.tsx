@@ -4,7 +4,7 @@ import { ArrowRight, Sparkles } from 'lucide-react'
 
 export default function DashboardAiBanner() {
   return (
-    <section className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-700 via-indigo-600 to-violet-600 px-6 py-7 text-white shadow-lg shadow-indigo-200/50 sm:px-8">
+    <section className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-700 via-indigo-600 to-violet-700 px-6 py-7 text-white shadow-lg sm:px-8">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -right-16 -top-24 h-72 w-72 rounded-full border border-white/15"
@@ -35,7 +35,7 @@ export default function DashboardAiBanner() {
 
         <Link
           to="/ai-assistant"
-          className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-indigo-700 shadow-sm transition hover:bg-indigo-50"
+          className="nf-focusable nf-motion inline-flex min-h-11 items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-indigo-700 hover:bg-indigo-50"
         >
           Open AI Assistant
           <ArrowRight size={17} />

@@ -1,5 +1,8 @@
 
-import type { ButtonHTMLAttributes, ReactNode } from 'react'
+import type {
+  ButtonHTMLAttributes,
+  ReactNode,
+} from 'react'
 
 type ButtonVariant =
   | 'primary'
@@ -19,22 +22,11 @@ interface ButtonProps
 }
 
 const variants: Record<ButtonVariant, string> = {
-  primary:
-    'bg-indigo-600 text-white hover:bg-indigo-700 ' +
-    'shadow-sm shadow-indigo-200',
-
-  secondary:
-    'bg-indigo-50 text-indigo-700 hover:bg-indigo-100',
-
-  outline:
-    'border border-slate-200 bg-white text-slate-700 ' +
-    'hover:border-indigo-200 hover:bg-slate-50',
-
-  ghost:
-    'bg-transparent text-slate-600 hover:bg-slate-100',
-
-  danger:
-    'bg-red-600 text-white hover:bg-red-700',
+  primary: 'nf-button-primary',
+  secondary: 'nf-button-secondary',
+  outline: 'nf-button-outline',
+  ghost: 'nf-button-ghost',
+  danger: 'nf-button-danger',
 }
 
 const sizes: Record<ButtonSize, string> = {
@@ -61,14 +53,10 @@ export default function Button({
       disabled={disabled || loading}
       aria-busy={loading || undefined}
       className={`
-        nf-motion inline-flex items-center justify-center
+        nf-motion nf-focusable
+        inline-flex items-center justify-center
         gap-2 rounded-xl font-semibold
-        transition-colors duration-200
-        focus-visible:outline-2
-        focus-visible:outline-offset-2
-        focus-visible:outline-indigo-500
-        disabled:cursor-not-allowed
-        disabled:opacity-50
+        disabled:cursor-not-allowed disabled:opacity-50
         ${variants[variant]}
         ${sizes[size]}
         ${className}

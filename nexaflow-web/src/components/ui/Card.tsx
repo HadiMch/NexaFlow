@@ -24,22 +24,19 @@ export default function Card({
   return (
     <div
       {...props}
-      className={`
-        nf-surface min-w-0 overflow-hidden
-        ${className}
-      `}
+      className={`nf-surface min-w-0 overflow-hidden ${className}`}
     >
       {(title || description || action) && (
-        <div className="flex flex-wrap items-start justify-between gap-3 border-b border-slate-100 px-5 py-4">
+        <div className="nf-card-header flex flex-wrap items-start justify-between gap-3 border-b px-5 py-4">
           <div className="min-w-0">
             {title && (
-              <h3 className="text-base font-bold tracking-tight text-slate-900">
+              <h3 className="nf-text-primary text-base font-bold tracking-tight">
                 {title}
               </h3>
             )}
 
             {description && (
-              <p className="mt-1 text-sm leading-6 text-slate-500">
+              <p className="nf-text-muted mt-1 text-sm leading-6">
                 {description}
               </p>
             )}

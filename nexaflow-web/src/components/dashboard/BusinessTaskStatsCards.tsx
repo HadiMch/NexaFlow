@@ -8,6 +8,7 @@ import {
 } from 'lucide-react'
 
 import { useBusinessTaskStats } from '../../hooks/tasks/useBusinessTaskStats'
+
 import StatCard from './StatCard'
 
 export default function BusinessTaskStatsCards() {
@@ -54,11 +55,11 @@ export default function BusinessTaskStatsCards() {
   return (
     <section>
       <div className="mb-5">
-        <h2 className="text-lg font-bold tracking-tight text-slate-900">
+        <h2 className="nf-section-title">
           Task Overview
         </h2>
 
-        <p className="mt-1 text-sm text-slate-500">
+        <p className="nf-section-description">
           Monitor task workloads, progress, and deadlines.
         </p>
       </div>
@@ -71,6 +72,7 @@ export default function BusinessTaskStatsCards() {
             value={card.value}
             icon={card.icon}
             tone={card.tone}
+            description={card.description}
             loading={loading}
             error={
               error
@@ -79,7 +81,6 @@ export default function BusinessTaskStatsCards() {
                   ? 'Task statistics unavailable'
                   : undefined
             }
-            description={card.description}
           />
         ))}
       </div>
