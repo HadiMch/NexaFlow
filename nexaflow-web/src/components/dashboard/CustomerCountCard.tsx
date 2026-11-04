@@ -1,20 +1,33 @@
 
 import { useEffect, useState } from 'react'
+import { UsersRound } from 'lucide-react'
 import { dashboardService } from '../../services/dashboardService'
+import StatCard from './StatCard'
 
-function CustomerCountCard() {
+export default function CustomerCountCard() {
   const [count, setCount] = useState<number | null>(null)
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState(false)
 
   useEffect(() => {
     let active = true
 
-    dashboardService.getCustomerCount()
-      .then((result) => {
-        if (active) setCount(result)
+    dashboardService
+      .getCustomerCount().then((result) => {
+        if (active) {
+          setCount(result)
+          setError(false)
+        }
       })
       .catch(() => {
-        if (active) setError(true)
+        if (active) {
+          setError(true)
+        }
+      })
+      .finally(() => {
+        if (active) {
+          setLoading(false)
+        }
       })
 
     return () => {
@@ -23,16 +36,14 @@ function CustomerCountCard() {
   }, [])
 
   return (
-    <div className="rounded-xl bg-white p-6 shadow-sm">
-      <p className="text-sm text-slate-500">
-        Total Customers
-      </p>
-
-      <p className="mt-3 text-3xl font-bold text-slate-900">
-        {error ? 'Error' : count === null ? 'Loading...' : count}
-      </p>
-    </div>
+    <StatCard
+      title="Total Customers"
+      value={count}
+      icon={UsersRound}
+      tone="indigo"
+      loading={loading}
+      error={error ? 'Unable to load customers' : undefined}
+      description="Customers in your database"
+    />
   )
 }
-
-export default CustomerCountCard

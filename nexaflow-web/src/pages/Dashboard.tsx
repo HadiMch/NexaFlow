@@ -1,65 +1,50 @@
 
-import {
-  ArrowUpRight,
-  LayoutDashboard,
-} from 'lucide-react'
-
+import DashboardHeader from '../components/dashboard/DashboardHeader'
+import DashboardAiBanner from '../components/dashboard/DashboardAiBanner'
+import DashboardQuickActions from '../components/dashboard/DashboardQuickActions'
 import CustomerCountCard from '../components/dashboard/CustomerCountCard'
 import InventoryStatsCards from '../components/dashboard/InventoryStatsCards'
 import BusinessTaskStatsCards from '../components/dashboard/BusinessTaskStatsCards'
 
 export default function Dashboard() {
   return (
-    <div className="space-y-8">
-      {/* Dashboard introduction */}
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50 px-3 py-1.5 text-xs font-semibold text-indigo-700">
-            <LayoutDashboard size={14} />
-            Business Overview
+    <div className="space-y-8 pb-6">
+      <DashboardHeader />
+
+      <DashboardAiBanner />
+
+      {/* Business Overview */}
+      <section aria-labelledby="business-overview-title">
+        <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h2
+              id="business-overview-title"
+              className="text-lg font-bold tracking-tight text-slate-900"
+            >
+              Business Overview
+            </h2>
+
+            <p className="mt-1 text-sm text-slate-500">
+              Essential metrics from your business records.
+            </p>
           </div>
 
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900">
-            Dashboard
-          </h1>
-
-          <p className="mt-2 text-sm leading-6 text-slate-500">
-            Monitor your business performance and manage
-            operations from one place.
-          </p>
+          <span className="text-xs text-slate-400">
+            Current recorded totals
+          </span>
         </div>
 
-        <a
-          href="/analytics"
-          className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-indigo-200 hover:text-indigo-600"
-        >
-          View Analytics
-          <ArrowUpRight size={16} />
-        </a>
-      </div>
-
-      {/* Business statistics */}
-      <section>
-        <div className="mb-5">
-          <h2 className="text-lg font-bold text-slate-900">
-            Business Overview
-          </h2>
-
-          <p className="mt-1 text-sm text-slate-500">
-            A quick look at your customers and inventory.
-          </p>
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="grid items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           <CustomerCountCard />
           <InventoryStatsCards />
         </div>
       </section>
 
-      {/* Task statistics */}
-      <section>
-        <BusinessTaskStatsCards />
-      </section>
+      {/* Tasks Overview */}
+      <BusinessTaskStatsCards />
+
+      {/* Quick Access */}
+      <DashboardQuickActions />
     </div>
   )
 }
