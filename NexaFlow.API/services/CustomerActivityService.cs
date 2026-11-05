@@ -6,12 +6,10 @@ using NexaFlow.API.Models;
 
 namespace NexaFlow.API.Services;
 
-public class CustomerActivityService
-{
+public class CustomerActivityService{
     private readonly AppDbContext _context;
 
-    public CustomerActivityService(AppDbContext context)
-    {
+    public CustomerActivityService(AppDbContext context){
         _context = context;
     }
 
