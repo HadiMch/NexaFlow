@@ -1,0 +1,78 @@
+
+/* Global document */
+
+body {
+  background: var(--nf-background);
+  color: var(--nf-text);
+}
+
+/* Surfaces */
+
+.nf-surface {
+  background: var(--nf-surface);
+  border: 1px solid var(--nf-border);
+  border-radius: var(--nf-radius-lg);
+  box-shadow: var(--nf-shadow-card);
+}
+
+/* Page */
+
+.nf-page {
+  color: var(--nf-text);
+}
+
+/* Typography */
+
+.nf-text-primary {
+  color: var(--nf-text);
+}
+
+.nf-text-secondary {
+  color: var(--nf-text-secondary);
+}
+
+.nf-text-muted {
+  color: var(--nf-text-muted);
+}
+
+.nf-section-title {
+  color: var(--nf-text);
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.5;
+}
+
+.nf-section-description {
+  margin-top: 0.25rem;
+  color: var(--nf-text-muted);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+/* Accessibility */
+
+.nf-focusable:focus-visible {
+  outline: 2px solid var(--nf-primary);
+  outline-offset: 2px;
+}
+
+/* Motion */
+
+.nf-motion {
+  transition-property:
+    background-color,
+    border-color,
+    color,
+    box-shadow,
+    transform;
+  transition-duration: 180ms;
+  transition-timing-function: ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nf-motion {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,123 +1,113 @@
+import { Save, UserPlus } from "lucide-react";
 
-import { useState, type FormEvent } from 'react'
-import type { Customer, CustomerInput } from '../../types/customer'
+import type { Customer, CustomerInput } from "../../types/customer";
+import { useCustomerForm } from "../../hooks/customers/useCustomerForm";
+
+import Button from "../ui/Button";
+import Input from "../ui/Input";
 
 interface CustomerFormProps {
-  editingCustomer: Customer | null
-  saving: boolean
-  onSubmit: (data: CustomerInput) => Promise<boolean>
-  onCancel: () => void
+  editingCustomer: Customer | null;
+  saving: boolean;
+  onSubmit: (data: CustomerInput) => Promise<boolean>;
+  onCancel: () => void;
+  onDirtyChange?: (dirty: boolean) => void;
 }
 
-function CustomerForm({
+export default function CustomerForm({
   editingCustomer,
   saving,
   onSubmit,
   onCancel,
+  onDirtyChange,
 }: CustomerFormProps) {
-  const [name, setName] = useState(editingCustomer?.name ?? '')  
-  const [email, setEmail] = useState(editingCustomer?.email ?? '')
-  const [phone, setPhone] = useState(editingCustomer?.phone ?? '')
-  const [error, setError] = useState('')
-
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    setError('')
-
-    if (!name.trim() || !email.trim()) {
-      setError('Name and email are required.')
-      return
-    }
-
-    const success = await onSubmit({
-      name: name.trim(),
-      email: email.trim(),
-      phone: phone.trim(),
-    })
-
-    if (success) {
-      if (!editingCustomer) {
-        setName('')
-        setEmail('')
-        setPhone('')
-      }
-    } else {
-      setError('Failed to save customer. Please try again.')
-    }
-  }
+  const form = useCustomerForm({
+    editingCustomer,
+    saving,
+    onSubmit,
+    onDirtyChange,
+  });
 
   return (
     <form
-      onSubmit={handleSubmit}
-      className="mt-8 rounded-xl bg-white p-6 shadow-sm"
+      onSubmit={(event) => void form.handleSubmit(event)}
+      className="space-y-5"
     >
-      <h2 className="mb-4 text-xl font-semibold text-slate-900">
-        {editingCustomer ? 'Edit Customer' : 'Add Customer'}
-      </h2>
+      <div className="grid gap-5 sm:grid-cols-2">
+        <div className="sm:col-span-2">
+          <Input
+            label="Full Name"
+            type="text"
+            name="name"
+            autoComplete="name"
+            placeholder="Enter customer name"
+            value={form.name}
+            onChange={(event) => form.changeName(event.target.value)}
+            error={form.errors.name}
+            required
+            maxLength={100}
+            disabled={saving}
+          />
+        </div>
 
-      <div className="grid gap-4 md:grid-cols-3">
-        <input
-          className="rounded-lg border border-slate-300 p-3 text-slate-900 focus:border-indigo-500 focus:outline-none"
-          type="text"
-          placeholder="Customer Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-          maxLength={100}
-        />
-
-        <input
-          className="rounded-lg border border-slate-300 p-3 text-slate-900 focus:border-indigo-500 focus:outline-none"
+        <Input
+          label="Email Address"
           type="email"
-          placeholder="Email Address"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          name="email"
+          autoComplete="email"
+          placeholder="customer@example.com"
+          value={form.email}
+          onChange={(event) => form.changeEmail(event.target.value)}
+          error={form.errors.email}
           required
           maxLength={255}
+          disabled={saving}
         />
 
-        <input
-          className="rounded-lg border border-slate-300 p-3 text-slate-900 focus:border-indigo-500 focus:outline-none"
+        <Input
+          label="Phone Number"
           type="tel"
-          placeholder="Phone Number"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
+          name="phone"
+          autoComplete="tel"
+          placeholder="Enter phone number"
+          value={form.phone}
+          onChange={(event) => form.changePhone(event.target.value)}
+          error={form.errors.phone}
           maxLength={30}
+          disabled={saving}
+          helperText="Optional contact number"
         />
       </div>
 
-      {error && (
-        <p role="alert" className="mt-3 text-sm text-red-600">
-          {error}
+      {form.error && (
+        <p
+          role="alert"
+          className="rounded-xl p-3 text-sm"
+          style={{
+            background: "var(--nf-danger-soft)",
+            color: "var(--nf-danger)",
+          }}
+        >
+          {form.error}
         </p>
       )}
 
-      <div className="mt-4 flex gap-3">
-        <button
-          type="submit"
-          disabled={saving}
-          className="rounded-lg bg-indigo-600 px-5 py-3 font-medium text-white hover:bg-indigo-700 disabled:opacity-50"
-        >
-          {saving
-            ? 'Saving...'
-            : editingCustomer
-              ? 'Save Changes'
-              : 'Add Customer'}
-        </button>
+      <div
+        className="flex flex-wrap justify-end gap-3 border-t pt-5"
+        style={{ borderColor: "var(--nf-border)" }}
+      >
+        <Button variant="outline" disabled={saving} onClick={onCancel}>
+          Cancel
+        </Button>
 
-        {editingCustomer && (
-          <button
-            type="button"
-            onClick={onCancel}
-            disabled={saving}
-            className="rounded-lg bg-slate-200 px-5 py-3 text-slate-700 hover:bg-slate-300 disabled:opacity-50"
-          >
-            Cancel
-          </button>
-        )}
+        <Button
+          type="submit"
+          loading={saving}
+          icon={editingCustomer ? <Save size={17} /> : <UserPlus size={17} />}
+        >
+          {editingCustomer ? "Save Changes" : "Add Customer"}
+        </Button>
       </div>
     </form>
-  )
+  );
 }
-
-export default CustomerForm

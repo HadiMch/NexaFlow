@@ -1,0 +1,117 @@
+
+/* Buttons */
+
+.nf-button-primary {
+  background: var(--nf-primary);
+  color: white;
+}
+
+.nf-button-primary:hover:not(:disabled) {
+  background: var(--nf-primary-hover);
+}
+
+.nf-button-secondary {
+  background: var(--nf-primary-soft);
+  color: var(--nf-primary-text);
+}
+
+.nf-button-secondary:hover:not(:disabled) {
+  filter: brightness(0.96);
+}
+
+.nf-button-outline {
+  background: var(--nf-surface);
+  color: var(--nf-text-secondary);
+  border: 1px solid var(--nf-border);
+}
+
+.nf-button-outline:hover:not(:disabled),
+.nf-button-ghost:hover:not(:disabled) {
+  background: var(--nf-surface-hover);
+}
+
+.nf-button-ghost {
+  color: var(--nf-text-secondary);
+}
+
+.nf-button-danger {
+  background: #dc2626;
+  color: white;
+}
+
+.nf-button-danger:hover:not(:disabled) {
+  background: #b91c1c;
+}
+
+/* Cards */
+
+.nf-card-header {
+  border-color: var(--nf-border-soft);
+}
+
+/* Badges */
+
+.nf-badge-neutral {
+  background: var(--nf-surface-muted);
+  border-color: var(--nf-border);
+  color: var(--nf-text-secondary);
+}
+
+.nf-badge-primary {
+  background: var(--nf-primary-soft);
+  border-color: var(--nf-primary-soft);
+  color: var(--nf-primary-text);
+}
+
+.nf-badge-success {
+  background: var(--nf-success-soft);
+  border-color: transparent;
+  color: var(--nf-success);
+}
+
+.nf-badge-warning {
+  background: var(--nf-warning-soft);
+  border-color: transparent;
+  color: var(--nf-warning);
+}
+
+.nf-badge-danger {
+  background: var(--nf-danger-soft);
+  border-color: transparent;
+  color: var(--nf-danger);
+}
+
+.nf-badge-dot {
+  background: currentColor;
+}
+
+/* Inputs */
+
+.nf-input {
+  background: var(--nf-surface);
+  border-color: var(--nf-border);
+  color: var(--nf-text);
+}
+
+.nf-input::placeholder {
+  color: var(--nf-text-muted);
+}
+
+.nf-input:focus {
+  border-color: var(--nf-primary);
+  box-shadow: var(--nf-focus-ring);
+}
+
+.nf-input-error {
+  border-color: var(--nf-danger);
+}
+
+.nf-input:disabled {
+  background: var(--nf-surface-muted);
+}
+
+/* Loading skeletons */
+
+.nf-skeleton {
+  background: var(--nf-border);
+}

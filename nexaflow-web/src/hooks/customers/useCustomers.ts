@@ -1,7 +1,7 @@
 
 import { useCallback, useEffect, useState } from 'react'
-import { customerService } from '../services/customerService'
-import type { Customer, CustomerInput } from '../types/customer'
+import { customerService } from '../../services/customerService'
+import type { Customer, CustomerInput } from '../../types/customer'
 
 export function useCustomers() {
   const [customers, setCustomers] = useState<Customer[]>([])

@@ -1,11 +1,11 @@
 
 import { useCallback, useEffect, useState } from 'react'
-import { customerActivityService } from '../services/customerActivityService'
+import { customerActivityService } from "../../services/customerActivityService";
 import type {
   CustomerActivity,
   CreateCustomerActivityInput,
   UpdateCustomerActivityInput,
-} from '../types/customerActivity'
+} from "../../types/customerActivity";
 
 
 export function useCustomerActivities(customerId: number | null) {

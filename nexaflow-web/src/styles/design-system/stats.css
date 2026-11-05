@@ -1,0 +1,108 @@
+
+/* Base statistics card */
+
+.nf-stat-card {
+  border-color: var(--nf-border);
+  background: var(--nf-surface);
+}
+
+.nf-stat-card:hover {
+  border-color: var(--nf-primary);
+  box-shadow: var(--nf-shadow-card);
+}
+
+.nf-stat-icon {
+  background: var(--nf-primary-soft);
+  color: var(--nf-primary-text);
+}
+
+.nf-stat-accent {
+  background: var(--nf-primary);
+}
+
+/* Blue */
+
+.nf-stat-card[data-tone="blue"] .nf-stat-icon {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.nf-stat-card[data-tone="blue"] .nf-stat-accent {
+  background: #0284c7;
+}
+
+/* Emerald */
+
+.nf-stat-card[data-tone="emerald"] .nf-stat-icon {
+  background: #d1fae5;
+  color: #047857;
+}
+
+.nf-stat-card[data-tone="emerald"] .nf-stat-accent {
+  background: #059669;
+}
+
+/* Amber */
+
+.nf-stat-card[data-tone="amber"] .nf-stat-icon {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.nf-stat-card[data-tone="amber"] .nf-stat-accent {
+  background: #d97706;
+}
+
+/* Rose */
+
+.nf-stat-card[data-tone="rose"] .nf-stat-icon {
+  background: #ffe4e6;
+  color: #be123c;
+}
+
+.nf-stat-card[data-tone="rose"] .nf-stat-accent {
+  background: #e11d48;
+}
+
+/* Violet */
+
+.nf-stat-card[data-tone="violet"] .nf-stat-icon {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.nf-stat-card[data-tone="violet"] .nf-stat-accent {
+  background: #7c3aed;
+}
+
+/* Dark theme tone adjustments */
+
+:root[data-theme="dark"]
+.nf-stat-card[data-tone="blue"] .nf-stat-icon {
+  background: #12354b;
+  color: #7dd3fc;
+}
+
+:root[data-theme="dark"]
+.nf-stat-card[data-tone="emerald"] .nf-stat-icon {
+  background: #123b34;
+  color: #6ee7b7;
+}
+
+:root[data-theme="dark"]
+.nf-stat-card[data-tone="amber"] .nf-stat-icon {
+  background: #423319;
+  color: #fcd34d;
+}
+
+:root[data-theme="dark"]
+.nf-stat-card[data-tone="rose"] .nf-stat-icon {
+  background: #471e2b;
+  color: #fda4af;
+}
+
+:root[data-theme="dark"]
+.nf-stat-card[data-tone="violet"] .nf-stat-icon {
+  background: #30254e;
+  color: #c4b5fd;
+}

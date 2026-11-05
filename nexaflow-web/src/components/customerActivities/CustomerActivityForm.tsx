@@ -1,170 +1,109 @@
+import { useId } from "react";
+import { Plus, Save } from "lucide-react";
 
-import { useState } from 'react'
 import type {
   CustomerActivity,
-  CustomerActivityType,
   UpdateCustomerActivityInput,
-} from '../../types/customerActivity'
+} from "../../types/customerActivity";
+
+import { useCustomerActivityForm } from "../../hooks/customerActivities/useCustomerActivityForm";
+
+import Button from "../ui/Button";
+import CustomerActivityFormFields from "./CustomerActivityFormFields";
 
 interface CustomerActivityFormProps {
-  editingActivity: CustomerActivity | null
-  saving: boolean
-  onSubmit: (data: UpdateCustomerActivityInput) => Promise<boolean>
-  onCancel: () => void
+  editingActivity: CustomerActivity | null;
+  saving: boolean;
+  onSubmit: (data: UpdateCustomerActivityInput) => Promise<boolean>;
+  onCancel: () => void;
+  onDirtyChange?: (dirty: boolean) => void;
 }
 
-function CustomerActivityForm({
+export default function CustomerActivityForm({
   editingActivity,
   saving,
   onSubmit,
   onCancel,
+  onDirtyChange,
 }: CustomerActivityFormProps) {
-  const [type, setType] = useState<CustomerActivityType>(
-    editingActivity?.type ?? 'Call'
-  )
+  const formId = useId();
 
-  const [description, setDescription] = useState(
-    editingActivity?.description ?? ''
-  )
-
-  const [followUpDate, setFollowUpDate] = useState(
-    editingActivity?.followUpDate
-      ? editingActivity.followUpDate.slice(0, 16)
-      : ''
-  )
-
-  const [error, setError] = useState('')
-
-  async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
-    e.preventDefault()
-    setError('')
-
-    if (!description.trim()) {
-      setError('Please enter a description.')
-      return
-    }
-
-    const success = await onSubmit({
-      type,
-      description: description.trim(),
-      followUpDate: followUpDate
-        ? new Date(followUpDate).toISOString()
-        : null,
-    })
-
-    if (success && !editingActivity) {
-      setType('Call')
-      setDescription('')
-      setFollowUpDate('')
-    }
-
-    if (!success) {
-      setError('Failed to save customer activity.')
-    }
-  }
+  const form = useCustomerActivityForm({
+    editingActivity,
+    saving,
+    onSubmit,
+    onDirtyChange,
+  });
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="mt-6 rounded-xl bg-white p-6 shadow-sm"
+    <section
+      className="nf-surface overflow-hidden"
+      aria-labelledby={`${formId}-heading`}
     >
-      <h3 className="mb-4 text-lg font-semibold text-slate-900">
-        {editingActivity ? 'Edit Activity' : 'Record New Activity'}
-      </h3>
+      <div
+        className="border-b px-5 py-4"
+        style={{ borderColor: "var(--nf-border)" }}
+      >
+        <h3 id={`${formId}-heading`} className="nf-section-title">
+          {editingActivity ? "Edit Activity" : "Record New Activity"}
+        </h3>
 
-      <div className="space-y-4">
-        <div>
-          <label
-            htmlFor="activity-type"
-            className="mb-1 block text-sm font-medium text-slate-700"
+        <p className="nf-section-description">
+          {editingActivity
+            ? "Update the interaction details and follow-up."
+            : "Keep a record of customer communication and next steps."}
+        </p>
+      </div>
+
+      <form
+        onSubmit={(event) => void form.handleSubmit(event)}
+        className="space-y-5 p-5"
+      >
+        <CustomerActivityFormFields
+          formId={formId}
+          type={form.type}
+          description={form.description}
+          followUpDate={form.followUpDate}
+          saving={saving}
+          descriptionError={form.descriptionError}
+          dateError={form.dateError}
+          onTypeChange={form.setType}
+          onDescriptionChange={form.changeDescription}
+          onFollowUpDateChange={form.changeFollowUpDate}
+        />
+
+        {form.error && (
+          <p
+            role="alert"
+            className="rounded-xl p-3 text-sm"
+            style={{
+              color: "var(--nf-danger)",
+              background: "var(--nf-danger-soft)",
+            }}
           >
-            Activity Type
-          </label>
-
-          <select
-            id="activity-type"
-            value={type}
-            onChange={(e) =>
-              setType(e.target.value as CustomerActivityType)
-            }
-            className="w-full rounded-lg border border-slate-300 p-3"
-          >
-            <option value="Call">Call</option>
-            <option value="Email">Email</option>
-            <option value="Meeting">Meeting</option>
-            <option value="Note">Note</option>
-          </select>
-        </div>
-
-        <div>
-          <label
-            htmlFor="activity-description"
-            className="mb-1 block text-sm font-medium text-slate-700"
-          >
-            Description
-          </label>
-
-          <textarea
-            id="activity-description"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-            maxLength={1000}
-            rows={4}
-            placeholder="Describe the customer interaction..."
-            className="w-full rounded-lg border border-slate-300 p-3"
-          />
-        </div>
-
-        <div>
-          <label
-            htmlFor="activity-followup"
-            className="mb-1 block text-sm font-medium text-slate-700"
-          >
-            Follow-up Date (Optional)
-          </label>
-
-          <input
-            id="activity-followup"
-            type="datetime-local"
-            value={followUpDate}
-            onChange={(e) => setFollowUpDate(e.target.value)}
-            className="w-full rounded-lg border border-slate-300 p-3"
-          />
-        </div>
-
-        {error && (
-          <p role="alert" className="text-sm text-red-600">
-            {error}
+            {form.error}
           </p>
         )}
 
-        <div className="flex gap-3">
-          <button
-            type="submit"
-            disabled={saving}
-            className="rounded-lg bg-indigo-600 px-5 py-2 text-white hover:bg-indigo-700 disabled:opacity-50"
-          >
-            {saving
-              ? 'Saving...'
-              : editingActivity
-                ? 'Update Activity'
-                : 'Add Activity'}
-          </button>
-
+        <div
+          className="flex flex-wrap justify-end gap-3 border-t pt-5"
+          style={{ borderColor: "var(--nf-border)" }}
+        >
           {editingActivity && (
-            <button
-              type="button"
-              onClick={onCancel}
-              className="rounded-lg border border-slate-300 px-5 py-2"
-            >
-              Cancel
-            </button>
+            <Button variant="outline" disabled={saving} onClick={onCancel}>
+              Cancel Editing
+            </Button>
           )}
-        </div>
-      </div>
-    </form>
-  )
-}
 
-export default CustomerActivityForm
+          <Button
+            type="submit"
+            loading={saving}
+            icon={editingActivity ? <Save size={17} /> : <Plus size={17} />}
+          >
+            {editingActivity ? "Update Activity" : "Add Activity"}
+          </Button>
+        </div>
+      </form>
+    </section>
+  );
+}

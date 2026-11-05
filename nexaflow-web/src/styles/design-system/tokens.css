@@ -1,0 +1,91 @@
+
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+
+  /* Brand colors */
+  --nf-primary: #4f46e5;
+  --nf-primary-hover: #4338ca;
+  --nf-primary-soft: #eef2ff;
+  --nf-primary-text: #4338ca;
+
+  /* Backgrounds and surfaces */
+  --nf-background: #f7f9fc;
+  --nf-surface: #ffffff;
+  --nf-surface-muted: #f8fafc;
+  --nf-surface-hover: #f1f5f9;
+
+  /* Typography */
+  --nf-text: #0f172a;
+  --nf-text-secondary: #475569;
+  --nf-text-muted: #64748b;
+
+  /* Borders */
+  --nf-border: #e2e8f0;
+  --nf-border-soft: #f1f5f9;
+
+  /* Semantic colors */
+  --nf-success: #047857;
+  --nf-warning: #b45309;
+  --nf-danger: #b91c1c;
+
+  --nf-success-soft: #ecfdf5;
+  --nf-warning-soft: #fffbeb;
+  --nf-danger-soft: #fef2f2;
+
+  /* Border radii */
+  --nf-radius-sm: 0.5rem;
+  --nf-radius-md: 0.75rem;
+  --nf-radius-lg: 1rem;
+  --nf-radius-xl: 1.25rem;
+
+  /* Shadows */
+  --nf-shadow-card:
+    0 2px 8px rgb(15 23 42 / 0.03),
+    0 10px 30px rgb(15 23 42 / 0.03);
+
+  /* Focus */
+  --nf-focus-ring: 0 0 0 3px rgb(99 102 241 / 0.2);
+
+  background: var(--nf-background);
+  color: var(--nf-text);
+}
+
+:root[data-theme="dark"] {
+  /* Brand colors */
+  --nf-primary: #6366f1;
+  --nf-primary-hover: #818cf8;
+  --nf-primary-soft: #25284a;
+  --nf-primary-text: #c7d2fe;
+
+  /* Backgrounds and surfaces */
+  --nf-background: #0b1120;
+  --nf-surface: #151e30;
+  --nf-surface-muted: #192438;
+  --nf-surface-hover: #26344b;
+
+  /* Typography */
+  --nf-text: #f1f5f9;
+  --nf-text-secondary: #cbd5e1;
+  --nf-text-muted: #94a3b8;
+
+  /* Borders */
+  --nf-border: #334155;
+  --nf-border-soft: #263449;
+
+  /* Semantic colors */
+  --nf-success: #6ee7b7;
+  --nf-warning: #fcd34d;
+  --nf-danger: #fda4af;
+
+  --nf-success-soft: #123b34;
+  --nf-warning-soft: #423319;
+  --nf-danger-soft: #471e2b;
+
+  /* Shadows */
+  --nf-shadow-card:
+    0 2px 8px rgb(0 0 0 / 0.12),
+    0 12px 30px rgb(0 0 0 / 0.16);
+
+  /* Focus */
+  --nf-focus-ring: 0 0 0 3px rgb(129 140 248 / 0.3);
+}
