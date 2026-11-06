@@ -1,155 +1,107 @@
+import { RefreshCw } from "lucide-react";
 
-import { useState } from 'react'
+import { useTaskWorkspace } from "../hooks/tasks/useTaskWorkspace";
 
-import BusinessTaskForm from '../components/tasks/BusinessTaskForm'
-import BusinessTaskTable from '../components/tasks/BusinessTaskTable'
-import TaskStatsCards from '../components/tasks/TaskStatsCards'
-import TaskFilters from '../components/tasks/TaskFilters'
+import TaskHeader from "../components/tasks/TaskHeader";
+import TaskStatsCards from "../components/tasks/TaskStatsCards";
+import TaskFilters from "../components/tasks/TaskFilters";
+import BusinessTaskTable from "../components/tasks/BusinessTaskTable";
+import TaskDialogs from "../components/tasks/TaskDialogs";
 
-import { useBusinessTasks } from '../hooks/tasks/useBusinessTasks'
-import { useTaskFilters } from '../hooks/tasks/useTaskFilters'
+import Button from "../components/ui/Button";
+import Skeleton from "../components/ui/Skeleton";
 
-import type {
-  BusinessTask,
-  CreateBusinessTaskInput,
-} from '../types/businessTask'
-
-function Tasks() {
-  // Task CRUD
-  const {
-    tasks,
-    loading,
-    error,
-    saving,
-    deletingId,
-    addTask,
-    updateTask,
-    deleteTask,
-  } = useBusinessTasks()
-
-  // Editing state
-  const [editingTask, setEditingTask] =
-    useState<BusinessTask | null>(null)
-
-  // Search, filters and sorting
-  const {
-    search,
-    setSearch,
-    statusFilter,
-    setStatusFilter,
-    priorityFilter,
-    setPriorityFilter,
-    sortBy,
-    setSortBy,
-    filteredTasks,
-    sortedTasks,
-  } = useTaskFilters(tasks)
-
-  // Create or update task
-  async function handleSubmit(
-    data: CreateBusinessTaskInput
-  ): Promise<boolean> {
-    if (editingTask) {
-      const success = await updateTask(editingTask.id, data)
-
-      if (success) {
-        setEditingTask(null)
-      }
-
-      return success
-    }
-
-    return addTask(data)
-  }
-
-  // Delete task
-  async function handleDelete(id: number) {
-    const confirmed = window.confirm(
-      'Are you sure you want to delete this task?'
-    )
-
-    if (!confirmed) return
-
-    const success = await deleteTask(id)
-
-    if (success && editingTask?.id === id) {
-      setEditingTask(null)
-    }
-
-    if (!success) {
-      window.alert('Failed to delete task.')
-    }
-  }
-
-  // Select task for editing
-  function handleEdit(task: BusinessTask) {
-    setEditingTask(task)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
+export default function Tasks() {
+  const workspace = useTaskWorkspace();
 
   return (
-    <div>
-      {/* Page Header */}
-      <h1 className="text-3xl font-bold text-slate-900">
-        Task Management
-      </h1>
-
-      <p className="mt-2 text-slate-500">
-        Organize tasks, manage priorities, and track progress.
-      </p>
-
-      {/* Task Statistics */}
-      {!loading && !error && (
-        <TaskStatsCards tasks={tasks} />
-      )}
-
-      {/* Create / Edit Form */}
-      <BusinessTaskForm
-        key={editingTask?.id ?? 'new'}
-        editingTask={editingTask}
-        saving={saving}
-        onSubmit={handleSubmit}
-        onCancel={() => setEditingTask(null)}
+    <div className="nf-page space-y-6 pb-6">
+      <TaskHeader
+        totalCount={workspace.tasks.length}
+        onAdd={workspace.openCreateForm}
       />
 
-      {/* Search, Filtering and Sorting */}
+      {!workspace.loading && !workspace.error && (
+        <TaskStatsCards tasks={workspace.tasks} />
+      )}
+
       <TaskFilters
-        search={search}
-        onSearchChange={setSearch}
-        statusFilter={statusFilter}
-        onStatusChange={setStatusFilter}
-        priorityFilter={priorityFilter}
-        onPriorityChange={setPriorityFilter}
-        sortBy={sortBy}
-        onSortChange={setSortBy}
+        search={workspace.search}
+        onSearchChange={workspace.setSearch}
+        statusFilter={workspace.statusFilter}
+        onStatusChange={workspace.setStatusFilter}
+        priorityFilter={workspace.priorityFilter}
+        onPriorityChange={workspace.setPriorityFilter}
+        sortBy={workspace.sortBy}
+        onSortChange={workspace.setSortBy}
       />
 
-      {/* Results Count */}
-      {!loading && !error && (
-        <p className="mt-4 text-sm text-slate-600">
-          Showing {filteredTasks.length} of {tasks.length} tasks
+      {!workspace.loading && !workspace.error && (
+        <p className="nf-text-muted text-sm">
+          Showing{" "}
+          <span className="nf-text-primary font-semibold">
+            {workspace.filteredTasks.length.toLocaleString()}
+          </span>{" "}
+          of{" "}
+          <span className="nf-text-primary font-semibold">
+            {workspace.tasks.length.toLocaleString()}
+          </span>{" "}
+          tasks
         </p>
       )}
 
-      {/* Task List */}
-      {loading ? (
-        <p className="mt-8 text-slate-500">
-          Loading tasks...
-        </p>
-      ) : error ? (
-        <p role="alert" className="mt-8 text-red-600">
-          {error}
-        </p>
+      {workspace.loading ? (
+        <div
+          role="status"
+          aria-label="Loading tasks"
+          className="nf-surface space-y-4 p-5"
+        >
+          {Array.from({ length: 5 }, (_, index) => (
+            <Skeleton key={index} className="h-14 w-full" />
+          ))}
+        </div>
+      ) : workspace.error ? (
+        <div className="nf-surface flex flex-col items-center gap-4 p-8 text-center">
+          <p
+            role="alert"
+            className="text-sm"
+            style={{ color: "var(--nf-danger)" }}
+          >
+            {workspace.error}
+          </p>
+
+          <Button
+            variant="outline"
+            icon={<RefreshCw size={16} />}
+            onClick={workspace.refreshTasks}
+          >
+            Try Again
+          </Button>
+        </div>
       ) : (
         <BusinessTaskTable
-          tasks={sortedTasks}
-          deletingId={deletingId}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
+          tasks={workspace.sortedTasks}
+          deletingId={workspace.deletingId}
+          onEdit={workspace.openEditForm}
+          onDelete={workspace.openDeleteDialog}
         />
       )}
-    </div>
-  )
-}
 
-export default Tasks
+      <TaskDialogs
+        formOpen={workspace.formOpen}
+        editingTask={workspace.editingTask}
+        taskToDelete={workspace.taskToDelete}
+        discardOpen={workspace.discardOpen}
+        saving={workspace.saving}
+        deletingId={workspace.deletingId}
+        onSubmit={workspace.handleSubmit}
+        onDirtyChange={workspace.setFormDirty}
+        onCloseForm={workspace.closeForm}
+        onDiscard={workspace.discardForm}
+        onCancelDiscard={workspace.closeDiscardDialog}
+        onConfirmDelete={() => void workspace.confirmDelete()}
+        onCancelDelete={workspace.closeDeleteDialog}
+      />
+    </div>
+  );
+}

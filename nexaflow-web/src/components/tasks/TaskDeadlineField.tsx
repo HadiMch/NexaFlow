@@ -1,31 +1,33 @@
+import { CalendarClock } from "lucide-react";
+
+import Input from "../ui/Input";
 
 interface TaskDeadlineFieldProps {
-  dueDate: string
-  onDueDateChange: (value: string) => void
+  dueDate: string;
+  saving: boolean;
+  error?: string;
+  onDueDateChange: (value: string) => void;
 }
 
-function TaskDeadlineField({
+export default function TaskDeadlineField({
   dueDate,
+  saving,
+  error,
   onDueDateChange,
 }: TaskDeadlineFieldProps) {
   return (
-    <div className="md:col-span-2">
-      <label
-        htmlFor="task-due-date"
-        className="mb-1 block text-sm font-medium text-slate-700"
-      >
-        Deadline (Optional)
-      </label>
-
-      <input
-        id="task-due-date"
+    <div className="sm:col-span-2">
+      <Input
+        label="Deadline (Optional)"
         type="datetime-local"
+        name="dueDate"
         value={dueDate}
-        onChange={(e) => onDueDateChange(e.target.value)}
-        className="w-full rounded-lg border border-slate-300 p-3"
+        onChange={(event) => onDueDateChange(event.target.value)}
+        leadingIcon={<CalendarClock size={17} />}
+        helperText="Leave empty if no deadline is needed"
+        error={error}
+        disabled={saving}
       />
     </div>
-  )
+  );
 }
-
-export default TaskDeadlineField

@@ -1,151 +1,100 @@
-
-import { useState } from 'react'
-import type { FormEvent } from 'react'
-
-import TaskTextFields from './TaskTextFields'
-import TaskSelectFields from './TaskSelectFields'
-import TaskDeadlineField from './TaskDeadlineField'
+import { Plus, Save } from "lucide-react";
 
 import type {
   BusinessTask,
   CreateBusinessTaskInput,
-  TaskPriority,
-  TaskStatus,
-} from '../../types/businessTask'
+} from "../../types/businessTask";
+
+import { useBusinessTaskForm } from "../../hooks/tasks/useBusinessTaskForm";
+
+import Button from "../ui/Button";
+import TaskTextFields from "./TaskTextFields";
+import TaskSelectFields from "./TaskSelectFields";
+import TaskDeadlineField from "./TaskDeadlineField";
 
 interface BusinessTaskFormProps {
-  editingTask: BusinessTask | null
-  saving: boolean
-  onSubmit: (data: CreateBusinessTaskInput) => Promise<boolean>
-  onCancel: () => void
+  editingTask: BusinessTask | null;
+  saving: boolean;
+  onSubmit: (data: CreateBusinessTaskInput) => Promise<boolean>;
+  onCancel: () => void;
+  onDirtyChange?: (dirty: boolean) => void;
 }
 
-function BusinessTaskForm({
+export default function BusinessTaskForm({
   editingTask,
   saving,
   onSubmit,
   onCancel,
+  onDirtyChange,
 }: BusinessTaskFormProps) {
-  const [title, setTitle] = useState(editingTask?.title ?? '')
-
-  const [description, setDescription] = useState(
-    editingTask?.description ?? ''
-  )
-
-  const [priority, setPriority] = useState<TaskPriority>(
-    editingTask?.priority ?? 'Medium'
-  )
-
-  const [status, setStatus] = useState<TaskStatus>(
-    editingTask?.status ?? 'To Do'
-  )
-
-  const [dueDate, setDueDate] = useState(() => {
-    if (!editingTask?.dueDate) return ''
-
-    const date = new Date(editingTask.dueDate)
-    const localDate = new Date(
-      date.getTime() - date.getTimezoneOffset() * 60000
-    )
-
-    return localDate.toISOString().slice(0, 16)
-  })
-
-  const [error, setError] = useState('')
-
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    setError('')
-
-    if (!title.trim()) {
-      setError('Task title is required.')
-      return
-    }
-
-    const success = await onSubmit({
-      title: title.trim(),
-      description: description.trim() || null,
-      priority,
-      status,
-      dueDate: dueDate
-        ? new Date(dueDate).toISOString()
-        : null,
-    })
-
-    if (success && !editingTask) {
-      setTitle('')
-      setDescription('')
-      setPriority('Medium')
-      setStatus('To Do')
-      setDueDate('')
-    }
-
-    if (!success) {
-      setError('Failed to save task.')
-    }
-  }
+  const form = useBusinessTaskForm({
+    editingTask,
+    saving,
+    onSubmit,
+    onDirtyChange,
+  });
 
   return (
     <form
-      onSubmit={handleSubmit}
-      className="mt-6 rounded-xl bg-white p-6 shadow-sm"
+      onSubmit={(event) => void form.handleSubmit(event)}
+      className="space-y-5"
     >
-      <h2 className="mb-5 text-xl font-semibold text-slate-900">
-        {editingTask ? 'Edit Task' : 'Create New Task'}
-      </h2>
-
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-5 sm:grid-cols-2">
         <TaskTextFields
-          title={title}
-          description={description}
-          onTitleChange={setTitle}
-          onDescriptionChange={setDescription}
+          title={form.title}
+          description={form.description}
+          saving={saving}
+          titleError={form.errors.title}
+          descriptionError={form.errors.description}
+          onTitleChange={form.changeTitle}
+          onDescriptionChange={form.changeDescription}
         />
 
         <TaskSelectFields
-          priority={priority}
-          status={status}
-          onPriorityChange={setPriority}
-          onStatusChange={setStatus}
+          priority={form.priority}
+          status={form.status}
+          saving={saving}
+          onPriorityChange={form.setPriority}
+          onStatusChange={form.setStatus}
         />
 
         <TaskDeadlineField
-          dueDate={dueDate}
-          onDueDateChange={setDueDate}
+          dueDate={form.dueDate}
+          saving={saving}
+          error={form.errors.dueDate}
+          onDueDateChange={form.changeDueDate}
         />
       </div>
 
-      {error && (
-        <p role="alert" className="mt-4 text-sm text-red-600">
-          {error}
+      {form.error && (
+        <p
+          role="alert"
+          className="rounded-xl p-3 text-sm"
+          style={{
+            color: "var(--nf-danger)",
+            background: "var(--nf-danger-soft)",
+          }}
+        >
+          {form.error}
         </p>
       )}
 
-      <div className="mt-6 flex gap-3">
-        <button
-          type="submit"
-          disabled={saving}
-          className="rounded-lg bg-indigo-600 px-5 py-2 text-white hover:bg-indigo-700 disabled:opacity-50"
-        >
-          {saving
-            ? 'Saving...'
-            : editingTask
-              ? 'Update Task'
-              : 'Create Task'}
-        </button>
+      <div
+        className="flex flex-wrap justify-end gap-3 border-t pt-5"
+        style={{ borderColor: "var(--nf-border)" }}
+      >
+        <Button variant="outline" disabled={saving} onClick={onCancel}>
+          Cancel
+        </Button>
 
-        {editingTask && (
-          <button
-            type="button"
-            onClick={onCancel}
-            className="rounded-lg border border-slate-300 px-5 py-2"
-          >
-            Cancel
-          </button>
-        )}
+        <Button
+          type="submit"
+          loading={saving}
+          icon={editingTask ? <Save size={17} /> : <Plus size={17} />}
+        >
+          {editingTask ? "Save Changes" : "Create Task"}
+        </Button>
       </div>
     </form>
-  )
+  );
 }
-
-export default BusinessTaskForm

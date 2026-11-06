@@ -1,59 +1,84 @@
+import { useId } from "react";
+
+import Input from "../ui/Input";
 
 interface TaskTextFieldsProps {
-  title: string
-  description: string
-  onTitleChange: (value: string) => void
-  onDescriptionChange: (value: string) => void
+  title: string;
+  description: string;
+  saving: boolean;
+  titleError?: string;
+  descriptionError?: string;
+  onTitleChange: (value: string) => void;
+  onDescriptionChange: (value: string) => void;
 }
 
-function TaskTextFields({
+export default function TaskTextFields({
   title,
   description,
+  saving,
+  titleError,
+  descriptionError,
   onTitleChange,
   onDescriptionChange,
 }: TaskTextFieldsProps) {
+  const id = useId();
+
   return (
     <>
-      <div className="md:col-span-2">
-        <label
-          htmlFor="task-title"
-          className="mb-1 block text-sm font-medium text-slate-700"
-        >
-          Task Title
-        </label>
-
-        <input
-          id="task-title"
-          type="text"
+      <div className="sm:col-span-2">
+        <Input
+          label="Task Title"
+          name="title"
           required
           maxLength={150}
           value={title}
-          onChange={(e) => onTitleChange(e.target.value)}
+          onChange={(event) => onTitleChange(event.target.value)}
           placeholder="Enter task title..."
-          className="w-full rounded-lg border border-slate-300 p-3"
+          error={titleError}
+          disabled={saving}
         />
       </div>
 
-      <div className="md:col-span-2">
+      <div className="sm:col-span-2">
         <label
-          htmlFor="task-description"
-          className="mb-1 block text-sm font-medium text-slate-700"
+          htmlFor={`${id}-description`}
+          className="nf-text-secondary mb-1.5 block text-sm font-semibold"
         >
           Description (Optional)
         </label>
 
         <textarea
-          id="task-description"
-          rows={3}
+          id={`${id}-description`}
+          rows={4}
           maxLength={2000}
+          disabled={saving}
           value={description}
-          onChange={(e) => onDescriptionChange(e.target.value)}
+          onChange={(event) => onDescriptionChange(event.target.value)}
           placeholder="Describe the task..."
-          className="w-full rounded-lg border border-slate-300 p-3"
+          aria-invalid={Boolean(descriptionError)}
+          aria-describedby={`${id}-description-feedback`}
+          className="nf-input nf-motion w-full resize-y rounded-xl border px-4 py-3 text-sm leading-6 outline-none disabled:opacity-60"
         />
+
+        <div
+          id={`${id}-description-feedback`}
+          className="mt-1 flex justify-between gap-3 text-xs"
+        >
+          <span
+            style={{
+              color: descriptionError
+                ? "var(--nf-danger)"
+                : "var(--nf-text-muted)",
+            }}
+          >
+            {descriptionError ?? "Add context or instructions"}
+          </span>
+
+          <span className="nf-text-muted tabular-nums">
+            {description.length.toLocaleString()} / 2,000
+          </span>
+        </div>
       </div>
     </>
-  )
+  );
 }
-
-export default TaskTextFields

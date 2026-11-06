@@ -1,39 +1,45 @@
+import { useId } from "react";
 
-import type {
-  TaskPriority,
-  TaskStatus,
-} from '../../types/businessTask'
+import type { TaskPriority, TaskStatus } from "../../types/businessTask";
 
 interface TaskSelectFieldsProps {
-  priority: TaskPriority
-  status: TaskStatus
-  onPriorityChange: (value: TaskPriority) => void
-  onStatusChange: (value: TaskStatus) => void
+  priority: TaskPriority;
+  status: TaskStatus;
+  saving: boolean;
+  onPriorityChange: (value: TaskPriority) => void;
+  onStatusChange: (value: TaskStatus) => void;
 }
 
-function TaskSelectFields({
+export default function TaskSelectFields({
   priority,
   status,
+  saving,
   onPriorityChange,
   onStatusChange,
 }: TaskSelectFieldsProps) {
+  const id = useId();
+
+  const selectClass =
+    "nf-input nf-motion min-h-11 w-full rounded-xl border px-3.5 py-2.5 text-sm outline-none disabled:opacity-60";
+
   return (
     <>
       <div>
         <label
-          htmlFor="task-priority"
-          className="mb-1 block text-sm font-medium text-slate-700"
+          htmlFor={`${id}-priority`}
+          className="nf-text-secondary mb-1.5 block text-sm font-semibold"
         >
           Priority
         </label>
 
         <select
-          id="task-priority"
+          id={`${id}-priority`}
           value={priority}
-          onChange={(e) =>
-            onPriorityChange(e.target.value as TaskPriority)
+          disabled={saving}
+          onChange={(event) =>
+            onPriorityChange(event.target.value as TaskPriority)
           }
-          className="w-full rounded-lg border border-slate-300 p-3"
+          className={selectClass}
         >
           <option value="Low">Low</option>
           <option value="Medium">Medium</option>
@@ -43,19 +49,18 @@ function TaskSelectFields({
 
       <div>
         <label
-          htmlFor="task-status"
-          className="mb-1 block text-sm font-medium text-slate-700"
+          htmlFor={`${id}-status`}
+          className="nf-text-secondary mb-1.5 block text-sm font-semibold"
         >
           Status
         </label>
 
         <select
-          id="task-status"
+          id={`${id}-status`}
           value={status}
-          onChange={(e) =>
-            onStatusChange(e.target.value as TaskStatus)
-          }
-          className="w-full rounded-lg border border-slate-300 p-3"
+          disabled={saving}
+          onChange={(event) => onStatusChange(event.target.value as TaskStatus)}
+          className={selectClass}
         >
           <option value="To Do">To Do</option>
           <option value="In Progress">In Progress</option>
@@ -63,7 +68,5 @@ function TaskSelectFields({
         </select>
       </div>
     </>
-  )
+  );
 }
-
-export default TaskSelectFields

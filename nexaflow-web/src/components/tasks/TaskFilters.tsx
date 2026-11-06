@@ -1,26 +1,24 @@
+import { Search, SlidersHorizontal, RotateCcw } from "lucide-react";
 
-import type {
-  TaskPriority,
-  TaskStatus,
-} from '../../types/businessTask'
+import type { TaskPriority, TaskStatus } from "../../types/businessTask";
 
-import type { TaskSort } from '../../hooks/tasks/useTaskFilters'
+import type { TaskSort } from "../../hooks/tasks/useTaskFilters";
+
+import Button from "../ui/Button";
+import Input from "../ui/Input";
 
 interface TaskFiltersProps {
-  search: string
-  onSearchChange: (value: string) => void
-
-  statusFilter: TaskStatus | 'All'
-  onStatusChange: (value: TaskStatus | 'All') => void
-
-  priorityFilter: TaskPriority | 'All'
-  onPriorityChange: (value: TaskPriority | 'All') => void
-
-  sortBy: TaskSort
-  onSortChange: (value: TaskSort) => void
+  search: string;
+  onSearchChange: (value: string) => void;
+  statusFilter: TaskStatus | "All";
+  onStatusChange: (value: TaskStatus | "All") => void;
+  priorityFilter: TaskPriority | "All";
+  onPriorityChange: (value: TaskPriority | "All") => void;
+  sortBy: TaskSort;
+  onSortChange: (value: TaskSort) => void;
 }
 
-function TaskFilters({
+export default function TaskFilters({
   search,
   onSearchChange,
   statusFilter,
@@ -30,113 +28,129 @@ function TaskFilters({
   sortBy,
   onSortChange,
 }: TaskFiltersProps) {
-  return (
-    <>
-      {/* Search */}
-      <div className="mt-8 rounded-xl bg-white p-4 shadow-sm">
-        <label
-          htmlFor="task-search"
-          className="mb-2 block text-sm font-medium text-slate-700"
-        >
-          Search Tasks
-        </label>
+  const hasActiveFilters =
+    search.trim() !== "" ||
+    statusFilter !== "All" ||
+    priorityFilter !== "All" ||
+    sortBy !== "newest";
 
-        <input
-          id="task-search"
+  function resetFilters() {
+    onSearchChange("");
+    onStatusChange("All");
+    onPriorityChange("All");
+    onSortChange("newest");
+  }
+
+  const selectClass =
+    "nf-input nf-motion min-h-11 w-full rounded-xl border px-3.5 py-2.5 text-sm outline-none";
+
+  return (
+    <section className="nf-surface overflow-hidden">
+      <div
+        className="flex flex-wrap items-center justify-between gap-3 border-b px-5 py-4"
+        style={{ borderColor: "var(--nf-border)" }}
+      >
+        <div className="flex items-center gap-2">
+          <SlidersHorizontal
+            size={19}
+            style={{ color: "var(--nf-primary-text)" }}
+            aria-hidden="true"
+          />
+
+          <h2 className="nf-section-title">Search & Filters</h2>
+        </div>
+
+        {hasActiveFilters && (
+          <Button
+            variant="ghost"
+            size="sm"
+            icon={<RotateCcw size={15} />}
+            onClick={resetFilters}
+          >
+            Reset Filters
+          </Button>
+        )}
+      </div>
+
+      <div className="space-y-5 p-5">
+        <Input
+          label="Search Tasks"
           type="search"
           value={search}
-          onChange={(e) =>
-            onSearchChange(e.target.value)
-          }
+          onChange={(event) => onSearchChange(event.target.value)}
           placeholder="Search by title or description..."
-          className="w-full rounded-lg border border-slate-300 p-3 text-slate-900 focus:border-indigo-500 focus:outline-none"
+          leadingIcon={<Search size={17} />}
         />
-      </div>
 
-      {/* Filters and Sorting */}
-      <div className="mt-4 flex flex-wrap gap-4 rounded-xl bg-white p-4 shadow-sm">
-        {/* Status */}
-        <div className="min-w-48 flex-1">
-          <label
-            htmlFor="status-filter"
-            className="mb-1 block text-sm font-medium text-slate-700"
-          >
-            Filter by Status
-          </label>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div>
+            <label
+              htmlFor="task-status-filter"
+              className="nf-text-secondary mb-1.5 block text-sm font-semibold"
+            >
+              Status
+            </label>
 
-          <select
-            id="status-filter"
-            value={statusFilter}
-            onChange={(e) =>
-              onStatusChange(
-                e.target.value as TaskStatus | 'All'
-              )
-            }
-            className="w-full rounded-lg border border-slate-300 p-3"
-          >
-            <option value="All">All Statuses</option>
-            <option value="To Do">To Do</option>
-            <option value="In Progress">In Progress</option>
-            <option value="Completed">Completed</option>
-          </select>
-        </div>
+            <select
+              id="task-status-filter"
+              value={statusFilter}
+              onChange={(event) =>
+                onStatusChange(event.target.value as TaskStatus | "All")
+              }
+              className={selectClass}
+            >
+              <option value="All">All Statuses</option>
+              <option value="To Do">To Do</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Completed">Completed</option>
+            </select>
+          </div>
 
-        {/* Priority */}
-        <div className="min-w-48 flex-1">
-          <label
-            htmlFor="priority-filter"
-            className="mb-1 block text-sm font-medium text-slate-700"
-          >
-            Filter by Priority
-          </label>
+          <div>
+            <label
+              htmlFor="task-priority-filter"
+              className="nf-text-secondary mb-1.5 block text-sm font-semibold"
+            >
+              Priority
+            </label>
 
-          <select
-            id="priority-filter"
-            value={priorityFilter}
-            onChange={(e) =>
-              onPriorityChange(
-                e.target.value as TaskPriority | 'All'
-              )
-            }
-            className="w-full rounded-lg border border-slate-300 p-3"
-          >
-            <option value="All">All Priorities</option>
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
-          </select>
-        </div>
+            <select
+              id="task-priority-filter"
+              value={priorityFilter}
+              onChange={(event) =>
+                onPriorityChange(event.target.value as TaskPriority | "All")
+              }
+              className={selectClass}
+            >
+              <option value="All">All Priorities</option>
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
+          </div>
 
-        {/* Sorting */}
-        <div className="min-w-48 flex-1">
-          <label
-            htmlFor="task-sort"
-            className="mb-1 block text-sm font-medium text-slate-700"
-          >
-            Sort Tasks
-          </label>
+          <div>
+            <label
+              htmlFor="task-sort-filter"
+              className="nf-text-secondary mb-1.5 block text-sm font-semibold"
+            >
+              Sort By
+            </label>
 
-          <select
-            id="task-sort"
-            value={sortBy}
-            onChange={(e) =>
-              onSortChange(e.target.value as TaskSort)
-            }
-            className="w-full rounded-lg border border-slate-300 p-3"
-          >
-            <option value="newest">Newest First</option>
-            <option value="oldest">Oldest First</option>
-            <option value="dueSoon">
-              Deadline (Earliest First)
-            </option>
-            <option value="priority">
-              Priority (High to Low)
-            </option>
-          </select>
+            <select
+              id="task-sort-filter"
+              value={sortBy}
+              onChange={(event) => onSortChange(event.target.value as TaskSort)}
+              className={selectClass}
+            >
+              <option value="newest">Newest First</option>
+              <option value="oldest">Oldest First</option>
+              <option value="dueSoon">Deadline (Earliest First)</option>
+              <option value="priority">Priority (High to Low)</option>
+            </select>
+          </div>
         </div>
       </div>
-    </>
-  )
+    </section>
+  );
 }
-
-export default TaskFilters

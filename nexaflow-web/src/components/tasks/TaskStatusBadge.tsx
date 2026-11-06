@@ -1,47 +1,46 @@
+import type { TaskPriority, TaskStatus } from "../../types/businessTask";
 
-import type {
-  TaskPriority,
-  TaskStatus,
-} from '../../types/businessTask'
+import Badge from "../ui/Badge";
 
 interface TaskStatusBadgeProps {
-  value: TaskPriority | TaskStatus
-  variant: 'priority' | 'status'
+  value: TaskPriority | TaskStatus;
+  variant: "priority" | "status";
 }
 
-function TaskStatusBadge({
-  value,
-  variant,
-}: TaskStatusBadgeProps) {
-  function getBadgeColor() {
-    if (variant === 'priority') {
-      switch (value) {
-        case 'High':
-          return 'bg-red-50 text-red-700'
-        case 'Medium':
-          return 'bg-amber-50 text-amber-700'
-        default:
-          return 'bg-emerald-50 text-emerald-700'
-      }
-    }
+type BadgeVariant = "neutral" | "primary" | "success" | "warning" | "danger";
 
+function getBadgeVariant(
+  value: TaskPriority | TaskStatus,
+  variant: "priority" | "status",
+): BadgeVariant {
+  if (variant === "priority") {
     switch (value) {
-      case 'Completed':
-        return 'bg-emerald-50 text-emerald-700'
-      case 'In Progress':
-        return 'bg-blue-50 text-blue-700'
+      case "High":
+        return "danger";
+      case "Medium":
+        return "warning";
+      case "Low":
+        return "success";
       default:
-        return 'bg-slate-100 text-slate-700'
+        return "neutral";
     }
   }
 
-  return (
-    <span
-      className={`rounded-full px-3 py-1 text-xs font-medium ${getBadgeColor()}`}
-    >
-      {value}
-    </span>
-  )
+  switch (value) {
+    case "Completed":
+      return "success";
+    case "In Progress":
+      return "primary";
+    case "To Do":
+      return "neutral";
+    default:
+      return "neutral";
+  }
 }
 
-export default TaskStatusBadge
+export default function TaskStatusBadge({
+  value,
+  variant,
+}: TaskStatusBadgeProps) {
+  return <Badge variant={getBadgeVariant(value, variant)}>{value}</Badge>;
+}
