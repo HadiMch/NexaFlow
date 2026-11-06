@@ -1,163 +1,119 @@
-
-import { useState, type FormEvent } from 'react'
-import type { Product, ProductInput } from '../../types/product'
+import { PackagePlus, Save } from "lucide-react";
+import type { Product, ProductInput } from "../../types/product";
+import { useProductForm } from "../../hooks/inventory/useProductForm";
+import Button from "../ui/Button";
+import Input from "../ui/Input";
 
 interface ProductFormProps {
-  editingProduct: Product | null
-  saving: boolean
-  onSubmit: (data: ProductInput) => Promise<boolean>
-  onCancel: () => void
+  editingProduct: Product | null;
+  saving: boolean;
+  onSubmit: (data: ProductInput) => Promise<boolean>;
+  onCancel: () => void;
+  onDirtyChange?: (dirty: boolean) => void;
 }
 
-function ProductForm({editingProduct, saving, onSubmit, onCancel,}: ProductFormProps) {
-  const [name, setName] = useState(editingProduct?.name ?? '')
-  const [sku, setSku] = useState(editingProduct?.sku ?? '')
-  const [quantity, setQuantity] = useState(editingProduct?.quantity.toString() ?? '0')
-  const [price, setPrice] = useState(editingProduct?.price.toString() ?? '0')
-  const [error, setError] = useState('')
-
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    setError('')
-
-    const parsedQuantity = Number(quantity)
-    const parsedPrice = Number(price)
-
-    if (!name.trim() || !sku.trim()) {
-      setError('Product name and SKU are required.')
-      return
-    }
-
-    if (
-      !Number.isInteger(parsedQuantity) ||parsedQuantity < 0 ||!Number.isFinite(parsedPrice) ||
-      parsedPrice < 0 ||parsedPrice > 999999999) {
-      setError('Enter a valid quantity and price.')
-      return
-    }
-
-    const success = await onSubmit({
-      name: name.trim(),
-      sku: sku.trim(),
-      quantity: parsedQuantity,
-      price: parsedPrice,
-    })
-
-    if (success) {
-      if (!editingProduct) {
-        setName('')
-        setSku('')
-        setQuantity('0')
-        setPrice('0')
-      }
-    } else {
-      setError('Failed to save product. Please try again.')
-    }
-  }
+export default function ProductForm({
+  editingProduct,
+  saving,
+  onSubmit,
+  onCancel,
+  onDirtyChange,
+}: ProductFormProps) {
+  const form = useProductForm({
+    editingProduct,
+    saving,
+    onSubmit,
+    onDirtyChange,
+  });
 
   return (
     <form
-      onSubmit={handleSubmit}
-      className="mt-8 rounded-xl bg-white p-6 shadow-sm"
+      onSubmit={(event) => void form.handleSubmit(event)}
+      className="space-y-5"
     >
-      <h2 className="mb-4 text-xl font-semibold text-slate-900">
-        {editingProduct ? 'Edit Product' : 'Add Product'}
-      </h2>
+      <div className="grid gap-5 sm:grid-cols-2">
+        <Input
+          label="Product Name"
+          name="name"
+          placeholder="Enter product name"
+          value={form.name}
+          onChange={(event) => form.changeField("name", event.target.value)}
+          required
+          maxLength={150}
+          error={form.errors.name}
+          disabled={saving}
+        />
 
-      <div className="grid gap-4 md:grid-cols-2">
-        <div>
-          <label htmlFor="product-name" className="mb-1 block text-sm text-slate-600">
-            Product Name
-          </label>
-          <input
-            id="product-name"
-            className="w-full rounded-lg border border-slate-300 p-3 text-slate-900"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-            maxLength={150}
-          />
-        </div>
+        <Input
+          label="SKU"
+          name="sku"
+          placeholder="e.g. PROD-001"
+          value={form.sku}
+          onChange={(event) => form.changeField("sku", event.target.value)}
+          required
+          maxLength={50}
+          error={form.errors.sku}
+          disabled={saving}
+        />
 
-        <div>
-          <label htmlFor="product-sku" className="mb-1 block text-sm text-slate-600">
-            SKU
-          </label>
-          <input
-            id="product-sku"
-            className="w-full rounded-lg border border-slate-300 p-3 text-slate-900"
-            value={sku}
-            onChange={(e) => setSku(e.target.value)}
-            required
-            maxLength={50}
-          />
-        </div>
+        <Input
+          label="Quantity"
+          name="quantity"
+          type="number"
+          min="0"
+          step="1"
+          value={form.quantity}
+          onChange={(event) => form.changeField("quantity", event.target.value)}
+          required
+          error={form.errors.quantity}
+          disabled={saving}
+          helperText="Available units in stock"
+        />
 
-        <div>
-          <label htmlFor="product-quantity" className="mb-1 block text-sm text-slate-600">
-            Quantity
-          </label>
-          <input
-            id="product-quantity"
-            type="number"
-            min="0"
-            step="1"
-            required
-            className="w-full rounded-lg border border-slate-300 p-3 text-slate-900"
-            value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
-          />
-        </div>
-
-        <div>
-          <label htmlFor="product-price" className="mb-1 block text-sm text-slate-600">
-            Price
-          </label>
-          <input
-            id="product-price"
-            type="number"
-            min="0"
-            max="999999999"
-            step="0.01"
-            required
-            className="w-full rounded-lg border border-slate-300 p-3 text-slate-900"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-          />
-        </div>
+        <Input
+          label="Unit Price (USD)"
+          name="price"
+          type="number"
+          min="0"
+          max="999999999"
+          step="0.01"
+          value={form.price}
+          onChange={(event) => form.changeField("price", event.target.value)}
+          required
+          error={form.errors.price}
+          disabled={saving}
+        />
       </div>
 
-      {error && (
-        <p role="alert" className="mt-3 text-sm text-red-600">
-          {error}
+      {form.error && (
+        <p
+          role="alert"
+          className="rounded-xl p-3 text-sm"
+          style={{
+            color: "var(--nf-danger)",
+            background: "var(--nf-danger-soft)",
+          }}
+        >
+          {form.error}
         </p>
       )}
 
-      <div className="mt-5 flex gap-3">
-        <button
-          type="submit"
-          disabled={saving}
-          className="rounded-lg bg-indigo-600 px-5 py-3 font-medium text-white hover:bg-indigo-700 disabled:opacity-50"
-        >
-          {saving
-            ? 'Saving...'
-            : editingProduct
-              ? 'Save Changes'
-              : 'Add Product'}
-        </button>
+      <div
+        className="flex flex-wrap justify-end gap-3 border-t pt-5"
+        style={{ borderColor: "var(--nf-border)" }}
+      >
+        <Button variant="outline" disabled={saving} onClick={onCancel}>
+          Cancel
+        </Button>
 
-        {editingProduct && (
-          <button
-            type="button"
-            onClick={onCancel}
-            disabled={saving}
-            className="rounded-lg bg-slate-200 px-5 py-3 text-slate-700 hover:bg-slate-300"
-          >
-            Cancel
-          </button>
-        )}
+        <Button
+          type="submit"
+          loading={saving}
+          icon={editingProduct ? <Save size={17} /> : <PackagePlus size={17} />}
+        >
+          {editingProduct ? "Save Changes" : "Add Product"}
+        </Button>
       </div>
     </form>
-  )
+  );
 }
-
-export default ProductForm
