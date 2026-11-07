@@ -1,68 +1,69 @@
+import { Boxes } from "lucide-react";
 
-import type { AnalyticsOverview } from '../../types/analytics'
+import type { AnalyticsOverview } from "../../types/analytics";
+
+import AnalyticsProgressBar from "./AnalyticsProgressBar";
 
 interface InventoryHealthChartProps {
-  overview: AnalyticsOverview
+  overview: AnalyticsOverview;
 }
 
-function InventoryHealthChart({
+export default function InventoryHealthChart({
   overview,
 }: InventoryHealthChartProps) {
-  const total = overview.totalProducts
-  const lowStock = overview.lowStockProducts
-  const healthy = Math.max(total - lowStock, 0)
-
-  const lowStockPercentage =
-    total > 0 ? (lowStock / total) * 100 : 0
-
-  const healthyPercentage =
-    total > 0 ? (healthy / total) * 100 : 0
+  const total = overview.totalProducts;
+  const lowStock = overview.lowStockProducts;
+  const healthy = Math.max(total - lowStock, 0);
 
   return (
-    <section className="mt-8 rounded-xl bg-white p-6 shadow-sm">
-      <h2 className="mb-5 text-xl font-semibold text-slate-900">
-        Inventory Health
-      </h2>
-
-      <div className="space-y-5">
-        <div>
-          <div className="mb-2 flex justify-between text-sm">
-            <span className="font-medium text-slate-700">
-              Healthy Stock
-            </span>
-            <span className="text-slate-500">
-              {healthy} ({healthyPercentage.toFixed(1)}%)
-            </span>
-          </div>
-
-          <div className="h-3 overflow-hidden rounded-full bg-slate-100">
-            <div
-              className="h-full rounded-full bg-emerald-500"
-              style={{ width: `${healthyPercentage}%` }}
-            />
-          </div>
+    <section className="nf-surface flex h-full flex-col rounded-2xl p-5 sm:p-6">
+      <header className="flex items-start gap-3">
+        <div
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+          style={{
+            background: "var(--nf-primary-soft)",
+            color: "var(--nf-primary-text)",
+          }}
+        >
+          <Boxes size={20} aria-hidden="true" />
         </div>
 
         <div>
-          <div className="mb-2 flex justify-between text-sm">
-            <span className="font-medium text-slate-700">
-              Low Stock
-            </span>
-            <span className="text-slate-500">
-              {lowStock} ({lowStockPercentage.toFixed(1)}%)
-            </span>
-          </div>
+          <h2 className="nf-section-title">Inventory Health</h2>
 
-          <div className="h-3 overflow-hidden rounded-full bg-slate-100">
-            <div
-              className="h-full rounded-full bg-amber-500"
-              style={{ width: `${lowStockPercentage}%` }}
-            />
-          </div>
+          <p className="nf-section-description">
+            Stock availability across your product catalog.
+          </p>
         </div>
+      </header>
+
+      <div className="mt-7 flex-1 space-y-6">
+        <AnalyticsProgressBar
+          label="Healthy Stock"
+          value={healthy}
+          total={total}
+          color="var(--nf-success)"
+        />
+
+        <AnalyticsProgressBar
+          label="Low Stock"
+          value={lowStock}
+          total={total}
+          color="var(--nf-warning)"
+        />
+      </div>
+
+      <div
+        className="mt-6 border-t pt-4"
+        style={{ borderColor: "var(--nf-border)" }}
+      >
+        <p className="nf-text-secondary text-sm">
+          Total Products:{" "}
+          <strong className="nf-text-primary tabular-nums">
+            {total.toLocaleString()}
+          </strong>
+        </p>
       </div>
     </section>
-  )
+  );
 }
-
-export default InventoryHealthChart

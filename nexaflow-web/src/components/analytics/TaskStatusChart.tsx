@@ -1,79 +1,79 @@
+import { ListTodo } from "lucide-react";
 
-import type { AnalyticsOverview } from '../../types/analytics'
+import type { AnalyticsOverview } from "../../types/analytics";
+
+import AnalyticsProgressBar from "./AnalyticsProgressBar";
 
 interface TaskStatusChartProps {
-  overview: AnalyticsOverview
+  overview: AnalyticsOverview;
 }
 
-function TaskStatusChart({ overview }: TaskStatusChartProps) {
-  const total = overview.totalTasks
+export default function TaskStatusChart({ overview }: TaskStatusChartProps) {
+  const total = overview.totalTasks;
 
   const statuses = [
     {
-      label: 'To Do',
+      label: "To Do",
       value: overview.todoTasks,
-      color: 'bg-slate-500',
+      color: "var(--nf-text-muted)",
     },
     {
-      label: 'In Progress',
+      label: "In Progress",
       value: overview.inProgressTasks,
-      color: 'bg-blue-500',
+      color: "var(--nf-primary)",
     },
     {
-      label: 'Completed',
+      label: "Completed",
       value: overview.completedTasks,
-      color: 'bg-emerald-500',
+      color: "var(--nf-success)",
     },
-  ]
+  ];
 
   return (
-    <section className="mt-8 rounded-xl bg-white p-6 shadow-sm">
-      <h2 className="mb-5 text-xl font-semibold text-slate-900">
-        Task Status Distribution
-      </h2>
+    <section className="nf-surface flex h-full flex-col rounded-2xl p-5 sm:p-6">
+      <header className="flex items-start gap-3">
+        <div
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
+          style={{
+            background: "var(--nf-primary-soft)",
+            color: "var(--nf-primary-text)",
+          }}
+        >
+          <ListTodo size={20} aria-hidden="true" />
+        </div>
 
-      <div className="space-y-5">
-        {statuses.map((status) => {
-          const percentage =
-            total > 0 ? (status.value / total) * 100 : 0
+        <div>
+          <h2 className="nf-section-title">Task Status Distribution</h2>
 
-          return (
-            <div key={status.label}>
-              <div className="mb-2 flex justify-between text-sm">
-                <span className="font-medium text-slate-700">
-                  {status.label}
-                </span>
+          <p className="nf-section-description">
+            Breakdown of tasks by current status.
+          </p>
+        </div>
+      </header>
 
-                <span className="text-slate-500">
-                  {status.value} ({percentage.toFixed(1)}%)
-                </span>
-              </div>
-
-              <div
-                className="h-3 overflow-hidden rounded-full bg-slate-100"
-                role="progressbar"
-                aria-label={status.label}
-                aria-valuenow={status.value}
-                aria-valuemin={0}
-                aria-valuemax={total || 1}
-              >
-                <div
-                  className={`h-full rounded-full ${status.color}`}
-                  style={{ width: `${percentage}%` }}
-                />
-              </div>
-            </div>
-          )
-        })}
+      <div className="mt-7 flex-1 space-y-6">
+        {statuses.map((status) => (
+          <AnalyticsProgressBar
+            key={status.label}
+            label={status.label}
+            value={status.value}
+            total={total}
+            color={status.color}
+          />
+        ))}
       </div>
 
-      <div className="mt-6 border-t border-slate-100 pt-4">
-        <p className="text-sm text-slate-500">
-          Total Tasks: <strong>{total}</strong>
+      <div
+        className="mt-6 border-t pt-4"
+        style={{ borderColor: "var(--nf-border)" }}
+      >
+        <p className="nf-text-secondary text-sm">
+          Total Tasks:{" "}
+          <strong className="nf-text-primary tabular-nums">
+            {total.toLocaleString()}
+          </strong>
         </p>
       </div>
     </section>
-  )
+  );
 }
-
-export default TaskStatusChart

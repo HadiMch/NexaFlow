@@ -1,41 +1,59 @@
-
-import { useEffect, useState } from 'react'
-import { analyticsService } from '../../services/analyticsService'
-import type { AnalyticsOverview } from '../../types/analytics'
+import { useEffect, useState } from "react";
+import { analyticsService } from "../../services/analyticsService";
+import type { AnalyticsOverview } from "../../types/analytics";
 
 export function useAnalyticsOverview() {
-  const [overview, setOverview] = useState<AnalyticsOverview | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
+  const [overview, setOverview] = useState<AnalyticsOverview | null>(null);
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
-    let active = true
+    let active = true;
 
     async function loadOverview() {
+      if (!active) return;
+
+      setLoading(true);
+      setError("");
+
       try {
-        const result = await analyticsService.getOverview()
+        const result = await analyticsService.getOverview();
 
         if (active) {
-          setOverview(result)
-          setError('')
+          setOverview(result);
         }
       } catch {
         if (active) {
-          setError('Failed to load analytics overview.')
+          setOverview(null);
+          setError("Failed to load analytics overview.");
         }
       } finally {
         if (active) {
-          setLoading(false)
+          setLoading(false);
         }
       }
     }
 
-    void loadOverview()
+    const timeout = setTimeout(() => {
+      void loadOverview();
+    }, 0);
 
     return () => {
-      active = false
-    }
-  }, [])
+      active = false;
+      clearTimeout(timeout);
+    };
+  }, [refreshKey]);
 
-  return { overview, loading, error }
+  function retryOverview() {
+    setRefreshKey((current) => current + 1);
+  }
+
+  return {
+    overview,
+    loading,
+    error,
+    retryOverview,
+  };
 }
