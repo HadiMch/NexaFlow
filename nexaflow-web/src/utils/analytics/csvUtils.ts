@@ -27,7 +27,7 @@ function escapeCsvValue(value: CsvValue): string {
   return `"${safeText.replace(/"/g, '""')}"`;
 }
 
-export function createCsv(rows: CsvValue[][]): string {
+function createCsv(rows: CsvValue[][]): string {
   return rows.map((row) => row.map(escapeCsvValue).join(",")).join("\r\n");
 }
 
