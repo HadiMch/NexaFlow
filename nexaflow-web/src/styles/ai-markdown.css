@@ -4,6 +4,7 @@
   font-size: 0.9rem;
   line-height: 1.8;
   overflow-wrap: anywhere;
+  min-width: 0;
 }
 
 .nexa-markdown > :first-child {
@@ -18,11 +19,13 @@
   margin: 0.75rem 0;
 }
 
+/* Headings */
+
 .nexa-markdown h1,
 .nexa-markdown h2,
 .nexa-markdown h3,
 .nexa-markdown h4 {
-  color: #0f172a;
+  color: var(--nf-text);
   font-weight: 700;
   line-height: 1.4;
   margin: 1.25rem 0 0.6rem;
@@ -47,8 +50,10 @@
 
 .nexa-markdown strong {
   font-weight: 700;
-  color: #0f172a;
+  color: var(--nf-text);
 }
+
+/* Lists */
 
 .nexa-markdown ul,
 .nexa-markdown ol {
@@ -73,43 +78,58 @@
   margin: 0.25rem 0;
 }
 
+/* Blockquotes */
+
 .nexa-markdown blockquote {
-  border-left: 3px solid #6366f1;
+  border-left: 3px solid var(--nf-primary);
   padding: 0.65rem 1rem;
   margin: 1rem 0;
-  background: #eef2ff;
+  background: var(--nf-primary-soft);
   border-radius: 0 0.6rem 0.6rem 0;
-  color: #475569;
+  color: var(--nf-text-secondary);
 }
 
+/* Links */
+
 .nexa-markdown a {
-  color: #4f46e5;
+  color: var(--nf-primary-text);
   font-weight: 500;
   text-decoration: underline;
   text-underline-offset: 3px;
 }
 
 .nexa-markdown a:hover {
-  color: #3730a3;
+  color: var(--nf-primary-hover);
 }
+
+.nexa-markdown a:focus-visible {
+  outline: 2px solid var(--nf-primary);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Dividers */
 
 .nexa-markdown hr {
   border: 0;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid var(--nf-border);
   margin: 1.5rem 0;
 }
 
-/* Inline code */
+/* Inline Code */
+
 .nexa-markdown :not(pre) > code {
   padding: 0.15rem 0.4rem;
-  background: #eef2ff;
+  background: var(--nf-primary-soft);
   border-radius: 0.35rem;
-  color: #4338ca;
+  color: var(--nf-primary-text);
   font-size: 0.85em;
   font-weight: 500;
+  overflow-wrap: anywhere;
 }
 
-/* Code blocks */
+/* Highlighted Code Blocks */
+
 .nexa-markdown pre {
   background: #0f172a;
   color: #e2e8f0;
@@ -120,7 +140,7 @@
   max-width: 100%;
   font-size: 0.82rem;
   line-height: 1.7;
-  border: 1px solid #1e293b;
+  border: 1px solid #334155;
 }
 
 .nexa-markdown pre code {
@@ -132,12 +152,13 @@
 }
 
 /* Tables */
+
 .nexa-markdown table {
-  border-collapse: collapse;
   display: block;
   width: max-content;
   max-width: 100%;
   overflow-x: auto;
+  border-collapse: collapse;
   margin: 1rem 0;
   font-size: 0.83rem;
   line-height: 1.6;
@@ -145,7 +166,7 @@
 
 .nexa-markdown th,
 .nexa-markdown td {
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--nf-border);
   padding: 0.7rem 0.9rem;
   text-align: left;
   vertical-align: top;
@@ -153,18 +174,20 @@
 }
 
 .nexa-markdown th {
-  background: #f1f5f9;
-  color: #334155;
+  background: var(--nf-surface-muted);
+  color: var(--nf-text-secondary);
   font-weight: 700;
 }
 
 .nexa-markdown tbody tr:nth-child(even) {
-  background: #f8fafc;
+  background: var(--nf-surface-muted);
 }
 
 .nexa-markdown tbody tr:hover {
-  background: #f1f5f9;
+  background: var(--nf-surface-hover);
 }
+
+/* Images */
 
 .nexa-markdown img {
   max-width: 100%;
@@ -172,7 +195,26 @@
   border-radius: 0.6rem;
 }
 
+/* Task Lists */
+
 .nexa-markdown input[type="checkbox"] {
   margin-right: 0.5rem;
-  accent-color: #4f46e5;
+  accent-color: var(--nf-primary);
+}
+
+/* Theme-specific code block adjustment */
+
+:root[data-theme="dark"] .nexa-markdown pre {
+  background: #020617;
+  border-color: var(--nf-border);
+}
+
+/* Accessibility */
+
+@media (prefers-reduced-motion: reduce) {
+  .nexa-markdown *,
+  .nexa-markdown *::before,
+  .nexa-markdown *::after {
+    scroll-behavior: auto;
+  }
 }

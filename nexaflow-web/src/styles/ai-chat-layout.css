@@ -1,14 +1,27 @@
 
-/* Resizable NexaFlow chat workspace */
+.nexa-ai-page {
+  width: 100%;
+  min-width: 0;
+  color: var(--nf-text);
+}
 
+.nexa-ai-container {
+  width: 100%;
+  min-width: 0;
+}
 
-/* Main resizable chat panel */
+/* Chat Panel */
 
 .nexa-chat-panel {
   width: 100%;
   height: min(78dvh, 720px);
-  min-height: 480px;
+  min-height: min(480px, 78dvh);
   max-width: 100%;
+  isolation: isolate;
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease,
+    box-shadow 180ms ease;
 }
 
 @media (min-width: 768px) {
@@ -20,9 +33,10 @@
   }
 }
 
-/* Keep suggested questions on one horizontal line */
+/* Suggested Questions */
 
 .nexa-chat-panel .nexa-suggestions {
+  display: flex;
   flex-wrap: nowrap;
   width: max-content;
   min-width: max-content;
@@ -33,6 +47,18 @@
   white-space: nowrap;
 }
 
+/* Invisible Scrollbar */
+
+.nexa-suggestions-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.nexa-suggestions-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Resize Handles */
 
 .nexa-resize-handle {
   position: absolute;
@@ -66,11 +92,13 @@
   cursor: nwse-resize;
 }
 
+/* Handle Indicators */
+
 .nexa-resize-right::after,
 .nexa-resize-bottom::after {
   content: "";
   position: absolute;
-  background: #c7d2fe;
+  background: var(--nf-primary);
   border-radius: 999px;
   opacity: 0;
   transition: opacity 150ms ease;
@@ -105,18 +133,27 @@
   bottom: 6px;
   width: 10px;
   height: 10px;
-  border-right: 2px solid #818cf8;
-  border-bottom: 2px solid #818cf8;
+  border-right: 2px solid var(--nf-primary);
+  border-bottom: 2px solid var(--nf-primary);
   border-radius: 0 0 3px 0;
 }
 
+/* Mobile */
+
 @media (max-width: 767px) {
+  .nexa-chat-panel {
+    border-radius: 16px;
+  }
+
   .nexa-resize-handle {
     display: none;
   }
 }
 
+/* Accessibility */
+
 @media (prefers-reduced-motion: reduce) {
+  .nexa-chat-panel,
   .nexa-resize-handle::after {
     transition: none;
   }
