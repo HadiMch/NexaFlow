@@ -1,26 +1,12 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-
 import type { PointerEvent as ReactPointerEvent } from 'react'
-
-import {
-  DEFAULT_CHAT_SIZE,
-  constrainChatSize,
-  loadChatSize,
-  resizeChatSize,
-  saveChatSize,
-} from '../../utils/ai/chatPanelSize'
-
-import type {
-  ChatSize,
-  ResizeDirection,
-} from '../../utils/ai/chatPanelSize'
-
+import {DEFAULT_CHAT_SIZE,constrainChatSize,loadChatSize,resizeChatSize,saveChatSize,} from '../../utils/ai/chatPanelSize'
+import type {ChatSize,ResizeDirection,} from '../../utils/ai/chatPanelSize'
 import { attachChatResizeEvents } from '../../utils/ai/chatResizeEvents'
 
 export function useResizableChat() {
   const [size, setSize] = useState<ChatSize>(loadChatSize)
-
   const containerRef = useRef<HTMLDivElement>(null)
   const cleanupRef = useRef<(() => void) | null>(null)
 
@@ -33,8 +19,7 @@ export function useResizableChat() {
   }, [])
 
   const constrainSize = useCallback((next: ChatSize) => {
-    const availableWidth =
-      containerRef.current?.clientWidth ?? window.innerWidth
+    const availableWidth = containerRef.current?.clientWidth ?? window.innerWidth
 
     return constrainChatSize(next, availableWidth)
   }, [])
@@ -63,9 +48,7 @@ export function useResizableChat() {
   const adjustSize = useCallback(
     (direction: ResizeDirection, amount: number) => {
       setSize((previous) =>
-        constrainSize(
-          resizeChatSize(previous, direction, amount, amount)
-        )
+        constrainSize(resizeChatSize(previous, direction, amount, amount))
       )
     },
     [constrainSize]

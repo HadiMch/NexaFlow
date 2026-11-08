@@ -1,22 +1,9 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-
 import { aiAssistantService } from '../../services/aiAssistantService'
-
 import { getAiChatErrorMessage } from '../../utils/ai/chatErrors'
-
-import {
-  createWelcomeMessage,
-  loadChatMessages,
-  saveChatMessages,
-} from '../../utils/ai/chatStorage'
-
-import {
-  buildChatHistory,
-  createUserMessage,
-  createAssistantMessage,
-} from '../../utils/ai/chatHistory'
-
+import {createWelcomeMessage,loadChatMessages,saveChatMessages,} from '../../utils/ai/chatStorage'
+import {buildChatHistory,createUserMessage,createAssistantMessage,} from '../../utils/ai/chatHistory'
 import type { ChatMessage } from '../../types/aiAssistant'
 
 export function useAiChat() {
@@ -26,7 +13,6 @@ export function useAiChat() {
 
   const [sending, setSending] = useState(false)
   const [error, setError] = useState('')
-
   const requestVersion = useRef(0)
   const sendingRef = useRef(false)
 
