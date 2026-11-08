@@ -73,7 +73,7 @@ export default function ChatSuggestions({
           type="button"
           disabled={disabled}
           onClick={() => onSelect(question)}
-          className="group/suggestion inline-flex shrink-0 items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50/70 px-3.5 py-2 text-xs font-medium text-indigo-700 shadow-sm transition-all hover:border-indigo-300 hover:bg-indigo-100 hover:shadow-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:shadow-sm dark:border-indigo-500/20 dark:bg-indigo-500/10 dark:text-indigo-300 dark:hover:border-indigo-400/40 dark:hover:bg-indigo-500/20"
+          className="group/suggestion inline-flex shrink-0 items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50/70 px-3.5 py-2 text-xs font-medium text-indigo-700 shadow-sm transition-all hover:border-indigo-300 hover:bg-indigo-100 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:shadow-sm dark:border-indigo-500/20 dark:bg-indigo-500/10 dark:text-indigo-300 dark:hover:border-indigo-400/40 dark:hover:bg-indigo-500/20"
         >
           {index === 0 ? (
             <Sparkles size={13} className="shrink-0" />

@@ -29,11 +29,11 @@ export default function AiChatConversation({
       aria-label="Chat messages"
       aria-live="polite"
       aria-relevant="additions text"
-      className="min-h-0 min-w-0 flex-1 overflow-y-auto bg-gradient-to-b from-slate-50 via-white to-indigo-50/40 px-4 py-6 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900 sm:px-6"
+      className="min-h-0 min-w-0 flex-1 overflow-y-auto bg-linear-to-b from-slate-50 via-white to-indigo-50/40 px-4 py-6 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900 sm:px-6"
     >
       {messages.length === 0 ? (
         <div className="flex min-h-full flex-col items-center justify-center px-3 py-8 text-center">
-          <div className="relative mb-5 flex h-20 w-20 items-center justify-center rounded-3xl bg-gradient-to-br from-indigo-600 to-violet-600 shadow-xl shadow-indigo-500/20">
+          <div className="relative mb-5 flex h-20 w-20 items-center justify-center rounded-3xl bg-linear-to-br from-indigo-600 to-violet-600 shadow-xl shadow-indigo-500/20">
             <Bot size={38} className="text-white" />
 
             <span className="absolute -right-2 -top-2 flex h-9 w-9 items-center justify-center rounded-2xl border-4 border-white bg-violet-500 text-white dark:border-slate-900">
@@ -81,7 +81,7 @@ export default function AiChatConversation({
           aria-label="NexaFlow AI is generating a response"
           className="mx-auto mt-5 flex w-full max-w-4xl items-start gap-3"
         >
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-violet-600 text-white shadow-sm">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-linear-to-br from-indigo-600 to-violet-600 text-white shadow-sm">
             <Bot size={19} />
           </div>
 

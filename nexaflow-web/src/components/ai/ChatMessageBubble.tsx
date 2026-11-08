@@ -61,7 +61,7 @@ export default function ChatMessageBubble({ message }: ChatMessageBubbleProps) {
       >
         <div className="flex items-center gap-2 px-1">
           {!isUser && (
-            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-violet-600 text-white shadow-sm shadow-indigo-500/20">
+            <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-linear-to-br from-indigo-600 to-violet-600 text-white shadow-sm shadow-indigo-500/20">
               <Bot size={17} />
             </div>
           )}
@@ -80,7 +80,7 @@ export default function ChatMessageBubble({ message }: ChatMessageBubbleProps) {
         <div
           className={`min-w-0 max-w-full rounded-2xl px-4 py-3 text-sm leading-7 shadow-sm sm:px-5 sm:py-4 ${
             isUser
-              ? "rounded-tr-md bg-gradient-to-br from-indigo-600 to-indigo-700 text-white shadow-indigo-500/10"
+              ? "rounded-tr-md bg-linear-to-br from-indigo-600 to-indigo-700 text-white shadow-indigo-500/10"
               : "rounded-tl-md border border-slate-200/80 bg-white text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
           }`}
         >

@@ -4,7 +4,7 @@ export default function AiChatToolbar() {
   return (
     <div className="flex shrink-0 items-center justify-between gap-3 border-b border-slate-100 bg-white/95 px-4 py-3.5 dark:border-slate-700 dark:bg-slate-900/95 sm:px-5">
       <div className="flex min-w-0 items-center gap-3">
-        <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-600 via-indigo-500 to-violet-600 text-white shadow-md shadow-indigo-500/20">
+        <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-linear-to-br from-indigo-600 via-indigo-500 to-violet-600 text-white shadow-md shadow-indigo-500/20">
           <Bot size={23} strokeWidth={1.8} />
 
           <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full border-2 border-white bg-violet-500 dark:border-slate-900">
