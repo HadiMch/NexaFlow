@@ -85,7 +85,9 @@ export default function ChatMessageBubble({ message }: ChatMessageBubbleProps) {
           }`}
         >
           {isUser ? (
-            <p className="whitespace-pre-wrap break-words">{message.content}</p>
+            <p className="whitespace-pre-wrap wrap-break-word">
+              {message.content}
+            </p>
           ) : (
             <div className="nexa-markdown min-w-0">
               <ReactMarkdown
@@ -110,7 +112,7 @@ export default function ChatMessageBubble({ message }: ChatMessageBubbleProps) {
               onClick={() => void handleCopy()}
               aria-label="Copy AI response"
               title="Copy AI response"
-              className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-[11px] font-medium text-slate-500 transition-colors hover:bg-indigo-50 hover:text-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-500 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-indigo-300"
+              className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-[11px] font-medium text-slate-500 transition-colors hover:bg-indigo-50 hover:text-indigo-600 focus-visible:outline-2 focus-visible:outline-indigo-500 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-indigo-300"
             >
               {copyState === "copied" ? (
                 <>
