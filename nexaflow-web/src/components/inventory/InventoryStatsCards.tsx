@@ -29,7 +29,7 @@ function InventoryStatCard({
         <div className="min-w-0">
           <p className="nf-text-secondary text-sm font-medium">{title}</p>
 
-          <p className="nf-text-primary mt-3 break-words text-2xl font-bold tracking-tight tabular-nums">
+          <p className="nf-text-primary mt-3 wrap-break-word text-2xl font-bold tracking-tight tabular-nums">
             {value}
           </p>
         </div>
