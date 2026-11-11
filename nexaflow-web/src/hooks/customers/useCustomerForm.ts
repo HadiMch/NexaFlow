@@ -94,15 +94,11 @@ export function useCustomerForm({
     if (Object.keys(nextErrors).length > 0) return;
 
     try {
-      const success = await onSubmit({
+      await onSubmit({
         name: trimmedName,
         email: trimmedEmail,
         phone: trimmedPhone,
       });
-
-      if (!success) {
-        setError("Unable to save customer. Check the details and try again.");
-      }
     } catch {
       setError("Unable to save customer. Please try again.");
     }
