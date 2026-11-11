@@ -31,6 +31,35 @@ describe("CustomerForm submission", () => {
     });
   });
 
+  it("keeps the form open when saving fails", async () => {
+    const onSubmit = vi.fn().mockResolvedValue(false);
+    const { user } = setupCustomerForm({ onSubmit });
+
+    await user.type(getCustomerField("Full Name"), "John Smith");
+
+    await user.type(getCustomerField("Email Address"), "john@example.com");
+
+    await user.click(
+      screen.getByRole("button", {
+        name: "Add Customer",
+      }),
+    );
+
+    await waitFor(() => {
+      expect(onSubmit).toHaveBeenCalledOnce();
+    });
+
+    expect(
+      screen.getByRole("button", {
+        name: "Add Customer",
+      }),
+    ).toBeInTheDocument();
+
+    expect(getCustomerField("Full Name")).toHaveValue("John Smith");
+    expect(getCustomerField("Email Address")).toHaveValue("john@example.com");
+  });
+
+
   it("trims whitespace before submission", async () => {
     const { user, onSubmit } = setupCustomerForm();
 
