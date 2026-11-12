@@ -1,75 +1,160 @@
-# React + TypeScript + Vite
+# NexaFlow — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The React and TypeScript frontend for **NexaFlow**, a full-stack business management platform.
 
-Currently, two official plugins are available:
+The application provides a responsive interface for customer management, inventory, CRM activities, business tasks, analytics, and an AI assistant.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Technology Stack
 
-## React Compiler
+| Technology | Purpose |
+|---|---|
+| React 19 | User interface |
+| TypeScript | Type-safe development |
+| Vite 8 | Development server and bundling |
+| Tailwind CSS 4 | Styling |
+| React Router | Client-side navigation |
+| Axios | Backend API communication |
+| Lucide React | Icons |
+| React Markdown | AI response rendering |
+| Vitest | Frontend testing |
+| React Testing Library | Component testing |
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Features
 
-## Expanding the ESLint configuration
+- Customer and inventory management
+- Customer activity CRM
+- Business task management
+- Analytics dashboard
+- AI Assistant with Markdown rendering
+- Dark and light themes
+- Responsive navigation and layout
+- Resizable AI chat interface
+- Route-level lazy loading
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Getting Started
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 1. Install dependencies
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+From the `nexaflow-web` directory:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Start the backend
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+The frontend requires the NexaFlow ASP.NET Core API.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+From the repository root:
 
+```bash
+dotnet run --project NexaFlow.API --launch-profile http
 ```
+
+The backend normally runs at:
+
+`http://localhost:5102`
+
+### 3. Configure API communication
+
+The Axios client is defined in:
+
+`src/services/api.ts`
+
+Current configuration:
+
+```typescript
+import axios from 'axios'
+
+const api = axios.create({
+  baseURL: 'http://localhost:5102/api',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  timeout: 10000,
+})
+
+export default api
+```
+
+The API base URL is currently hardcoded for local development. Update this configuration if the backend is hosted elsewhere.
+
+Environment-based configuration can be introduced before deployment.
+
+### 4. Start the frontend
+
+```bash
+npm run dev
+```
+
+Vite normally serves the application at:
+
+`http://localhost:5173`
+
+## Available Commands
+
+| Command | Description |
+|---|---|
+| `npm run dev` | Start the development server |
+| `npm run build` | Type-check and build for production |
+| `npm run preview` | Preview the production build |
+| `npm run lint` | Run ESLint |
+| `npm run test` | Run Vitest |
+| `npm run test:run` | Run tests once |
+| `npm run test:coverage` | Run tests with coverage |
+
+## Application Architecture
+
+The frontend uses reusable React components, TypeScript, shared API services, and modular application features.
+
+Its design emphasizes:
+
+- Reusable interface components
+- Consistent styling and design tokens
+- Separation of UI and API communication
+- Maintainable state and component logic
+- Responsive layouts
+- Route-level lazy loading
+
+## API Integration
+
+The frontend communicates with NexaFlow's REST API through Axios.
+
+The backend provides endpoints for:
+
+- Customers
+- Products and inventory
+- Customer activities
+- Business tasks
+- Analytics
+- AI Assistant
+
+Swagger documentation is available when the backend runs in Development:
+
+`http://localhost:5102/swagger/index.html`
+
+## Testing and Code Quality
+
+Run:
+
+```bash
+npm run lint
+npm run build
+npm run test:run
+```
+
+The project uses ESLint, TypeScript, and Vitest to support maintainability and automated verification.
+
+The GitHub Actions workflow currently runs frontend lint and production build checks.
+
+## Development Status
+
+The six core modules are implemented, with additional improvements planned for production readiness.
+
+Authentication and authorization have not yet been implemented.
+
+This frontend is currently intended for local development and portfolio demonstration.
+
+## Main Project
+
+See the [NexaFlow repository README](../README.md) for backend setup, database configuration, API documentation, and full project information.
