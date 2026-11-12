@@ -23,17 +23,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // 2. BUSINESS SERVICES
 // ==================================================
 
-// Inventory Management
 builder.Services.AddScoped<ProductService>();
-
-// Customer Activity / CRM
 builder.Services.AddScoped<CustomerActivityService>();
 
-// Task Management
 builder.Services.AddScoped<BusinessTaskService>();
 builder.Services.AddScoped<BusinessTaskStatsService>();
 
-// Analytics and Reporting
 builder.Services.AddScoped<AnalyticsService>();
 builder.Services.AddScoped<TaskTrendService>();
 
@@ -41,10 +36,8 @@ builder.Services.AddScoped<TaskTrendService>();
 // 3. AI ASSISTANT SERVICES
 // ==================================================
 
-// AI Assistant orchestration
 builder.Services.AddScoped<AiAssistantService>();
 
-// Groq AI HTTP Client
 builder.Services.AddHttpClient<GroqService>(client =>
 {
     client.Timeout = TimeSpan.FromSeconds(60);
@@ -57,13 +50,18 @@ builder.Services.AddHttpClient<GroqService>(client =>
 builder.Services.AddControllers();
 
 builder.Services.AddOpenApi();
-
 builder.Services.AddEndpointsApiExplorer();
-
 builder.Services.AddSwaggerGen();
 
 // ==================================================
-// 5. REACT FRONTEND CORS CONFIGURATION
+// 5. GLOBAL ERROR HANDLING
+// ==================================================
+
+// Register standardized HTTP Problem Details responses.
+builder.Services.AddProblemDetails();
+
+// ==================================================
+// 6. REACT FRONTEND CORS CONFIGURATION
 // ==================================================
 
 builder.Services.AddCors(options =>
@@ -78,54 +76,60 @@ builder.Services.AddCors(options =>
 });
 
 // ==================================================
-// 6. AI RATE LIMITING CONFIGURATION
+// 7. AI RATE LIMITING CONFIGURATION
 // ==================================================
 
 builder.Services.AddAiRateLimiting();
 
 // ==================================================
-// 7. BUILD APPLICATION
+// 8. BUILD APPLICATION
 // ==================================================
 
 var app = builder.Build();
 
 // ==================================================
-// 8. DEVELOPMENT DOCUMENTATION
+// 9. GLOBAL EXCEPTION HANDLING
+// ==================================================
+
+// Catch otherwise unhandled exceptions and return
+// standardized HTTP 500 Problem Details responses.
+// The framework also logs unhandled exceptions.
+app.UseExceptionHandler();
+
+// ==================================================
+// 10. DEVELOPMENT DOCUMENTATION
 // ==================================================
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-
     app.UseSwaggerUI();
-
     app.MapOpenApi();
 }
 
 // ==================================================
-// 9. HTTP REQUEST PIPELINE
+// 11. HTTP REQUEST PIPELINE
 // ==================================================
 
-// Redirect HTTP requests to HTTPS when configured.
-app.UseHttpsRedirection();
+// Disable HTTPS redirection only in integration tests.
+// Keep HTTPS redirection for all other environments.
+if (!app.Environment.IsEnvironment("Testing"))
+{
+    app.UseHttpsRedirection();
+}
 
-// Enable endpoint routing.
 app.UseRouting();
 
-// Allow requests from the React development frontend.
 app.UseCors("ReactDevelopment");
 
-// Apply the registered AI rate-limiting policy.
 app.UseRateLimiter();
 
-// Authorization middleware.
 app.UseAuthorization();
 
-// Map all API controllers.
 app.MapControllers();
 
 // ==================================================
-// 10. START APPLICATION
+// 12. START APPLICATION
 // ==================================================
 
 app.Run();
