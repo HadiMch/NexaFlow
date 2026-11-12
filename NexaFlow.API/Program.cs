@@ -1,5 +1,6 @@
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi;
 using NexaFlow.API.Data;
 using NexaFlow.API.Extensions;
 using NexaFlow.API.Services;
@@ -51,13 +52,32 @@ builder.Services.AddControllers();
 
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "NexaFlow API",
+        Version = "v1",
+        Description =
+            "NexaFlow is a full-stack business management " +
+            "application providing APIs for customer management, " +
+            "inventory, CRM activities, business tasks, " +
+            "analytics, and an AI assistant."
+    });
+
+    var xmlFile = $"{typeof(Program).Assembly.GetName().Name}.xml";
+
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    if (File.Exists(xmlPath)){
+        options.IncludeXmlComments(xmlPath);
+    }
+    });
 
 // ==================================================
 // 5. GLOBAL ERROR HANDLING
 // ==================================================
 
-// Register standardized HTTP Problem Details responses.
 builder.Services.AddProblemDetails();
 
 // ==================================================
@@ -91,9 +111,6 @@ var app = builder.Build();
 // 9. GLOBAL EXCEPTION HANDLING
 // ==================================================
 
-// Catch otherwise unhandled exceptions and return
-// standardized HTTP 500 Problem Details responses.
-// The framework also logs unhandled exceptions.
 app.UseExceptionHandler();
 
 // ==================================================
@@ -103,7 +120,17 @@ app.UseExceptionHandler();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint(
+            "/swagger/v1/swagger.json",
+            "NexaFlow API v1"
+        );
+
+        options.DocumentTitle = "NexaFlow API Documentation";
+    });
+
     app.MapOpenApi();
 }
 
@@ -111,8 +138,6 @@ if (app.Environment.IsDevelopment())
 // 11. HTTP REQUEST PIPELINE
 // ==================================================
 
-// Disable HTTPS redirection only in integration tests.
-// Keep HTTPS redirection for all other environments.
 if (!app.Environment.IsEnvironment("Testing"))
 {
     app.UseHttpsRedirection();
