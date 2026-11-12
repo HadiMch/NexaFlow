@@ -18,6 +18,11 @@ public class TaskAnalyticsTests
         using var factory = new NexaFlowWebApplicationFactory();
         using var client = factory.CreateClient();
 
+        var before = await client.GetFromJsonAsync<
+            AnalyticsOverviewDto>("/api/analytics/overview");
+
+        Assert.NotNull(before);
+
         using var scope = factory.Services.CreateScope();
         var context = scope.ServiceProvider
             .GetRequiredService<AppDbContext>();
@@ -36,12 +41,30 @@ public class TaskAnalyticsTests
             context.BusinessTasks.Add(task);
             await context.SaveChangesAsync();
 
-            var overview = await client.GetFromJsonAsync<
+            var after = await client.GetFromJsonAsync<
                 AnalyticsOverviewDto>("/api/analytics/overview");
 
-            Assert.NotNull(overview);
-            Assert.True(overview.OverdueTasks >= 1);
-            Assert.True(overview.PendingTasks >= 1);
+            Assert.NotNull(after);
+
+            Assert.Equal(
+                before.TotalTasks + 1,
+                after.TotalTasks
+            );
+
+            Assert.Equal(
+                before.OverdueTasks + 1,
+                after.OverdueTasks
+            );
+
+            Assert.Equal(
+                before.PendingTasks + 1,
+                after.PendingTasks
+            );
+
+            Assert.Equal(
+                before.TodoTasks + 1,
+                after.TodoTasks
+            );
         }
         finally
         {
@@ -59,19 +82,34 @@ public class TaskAnalyticsTests
         using var factory = new NexaFlowWebApplicationFactory();
         using var client = factory.CreateClient();
 
+        // Use yesterday to avoid a UTC midnight boundary.
+        var testDate = DateTime.UtcNow.Date.AddDays(-1);
+        var timestamp = testDate.AddHours(12);
+        var dateKey = testDate.ToString("yyyy-MM-dd");
+
+        var before = await client.GetFromJsonAsync<
+            List<TaskTrendDto>>(
+                "/api/analytics/task-trends?days=7"
+            );
+
+        Assert.NotNull(before);
+
+        var beforeDay = Assert.Single(
+            before,
+            t => t.Date == dateKey
+        );
+
         using var scope = factory.Services.CreateScope();
         var context = scope.ServiceProvider
             .GetRequiredService<AppDbContext>();
-
-        var now = DateTime.UtcNow;
 
         var task = new BusinessTask
         {
             Title = "Completed analytics regression test",
             Priority = "Medium",
             Status = "Completed",
-            CreatedAt = now,
-            CompletedAt = now
+            CreatedAt = timestamp,
+            CompletedAt = timestamp
         };
 
         try
@@ -79,22 +117,27 @@ public class TaskAnalyticsTests
             context.BusinessTasks.Add(task);
             await context.SaveChangesAsync();
 
-            var trends = await client.GetFromJsonAsync<
+            var after = await client.GetFromJsonAsync<
                 List<TaskTrendDto>>(
-                "/api/analytics/task-trends?days=7"
+                    "/api/analytics/task-trends?days=7"
+                );
+
+            Assert.NotNull(after);
+
+            var afterDay = Assert.Single(
+                after,
+                t => t.Date == dateKey
             );
 
-            Assert.NotNull(trends);
-
-            var today = now.ToString("yyyy-MM-dd");
-
-            var todayTrend = Assert.Single(
-                trends,
-                t => t.Date == today
+            Assert.Equal(
+                beforeDay.CreatedTasks + 1,
+                afterDay.CreatedTasks
             );
 
-            Assert.True(todayTrend.CreatedTasks >= 1);
-            Assert.True(todayTrend.CompletedTasks >= 1);
+            Assert.Equal(
+                beforeDay.CompletedTasks + 1,
+                afterDay.CompletedTasks
+            );
         }
         finally
         {
@@ -116,12 +159,16 @@ public class TaskAnalyticsTests
             "/api/businesstasks/stats"
         );
 
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal(
+            HttpStatusCode.OK,
+            response.StatusCode
+        );
 
         var stats = await response.Content
             .ReadFromJsonAsync<BusinessTaskStatsDto>();
 
         Assert.NotNull(stats);
+
         Assert.True(stats.TotalTasks >= 0);
         Assert.True(stats.OverdueTasks >= 0);
         Assert.True(stats.CompletedTasks >= 0);

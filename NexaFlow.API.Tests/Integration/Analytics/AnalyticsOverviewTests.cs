@@ -89,11 +89,18 @@ public class AnalyticsOverviewTests
         );
     }
 
+
     [Fact]
     public async Task Overview_NewProduct_IncreasesInventoryTotals()
     {
         using var factory = new NexaFlowWebApplicationFactory();
         using var client = factory.CreateClient();
+
+        // Capture the original dashboard statistics.
+        var before = await client.GetFromJsonAsync<
+            AnalyticsOverviewDto>("/api/analytics/overview");
+
+        Assert.NotNull(before);
 
         var product = new Product
         {
@@ -104,26 +111,52 @@ public class AnalyticsOverviewTests
         };
 
         using var scope = factory.Services.CreateScope();
+
         var context = scope.ServiceProvider
             .GetRequiredService<AppDbContext>();
 
-        context.Products.Add(product);
-        await context.SaveChangesAsync();
-
         try
         {
-            var overview = await client.GetFromJsonAsync<
+            context.Products.Add(product);
+            await context.SaveChangesAsync();
+
+            // Fetch analytics after inserting the product.
+            var after = await client.GetFromJsonAsync<
                 AnalyticsOverviewDto>("/api/analytics/overview");
 
-            Assert.NotNull(overview);
-            Assert.True(overview.TotalProducts >= 1);
-            Assert.True(overview.TotalStockQuantity >= 4);
-            Assert.True(overview.TotalInventoryValue >= 100m);
+            Assert.NotNull(after);
+
+            // Exactly one product should be added.
+            Assert.Equal(
+                before.TotalProducts + 1,
+                after.TotalProducts
+            );
+
+            // Stock quantity should increase by 4.
+            Assert.Equal(
+                before.TotalStockQuantity + 4,
+                after.TotalStockQuantity
+            );
+
+            // Inventory value should increase by 100.
+            Assert.Equal(
+                before.TotalInventoryValue + 100m,
+                after.TotalInventoryValue
+            );
+
+            // Product quantity is 4, so it is low stock.
+            Assert.Equal(
+                before.LowStockProducts + 1,
+                after.LowStockProducts
+            );
         }
         finally
         {
-            context.Products.Remove(product);
-            await context.SaveChangesAsync();
+            if (product.Id > 0)
+            {
+                context.Products.Remove(product);
+                await context.SaveChangesAsync();
+            }
         }
     }
 }
