@@ -7,24 +7,23 @@ namespace NexaFlow.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CustomerActivitiesController : ControllerBase{
+public class CustomerActivitiesController : ControllerBase
+{
     private readonly CustomerActivityService _service;
 
-    public CustomerActivitiesController(CustomerActivityService service){
+    public CustomerActivitiesController(CustomerActivityService service)
+    {
         _service = service;
     }
 
-
-    // GET: api/CustomerActivities/customer/1
     [HttpGet("customer/{customerId:int}")]
     public async Task<ActionResult<List<CustomerActivityResponseDto>>> GetByCustomer(
-        int customerId){
+        int customerId)
+    {
         var activities = await _service.GetAllAsync(customerId);
         return Ok(activities);
     }
 
-
-    // GET: api/CustomerActivities/1
     [HttpGet("{id:int}")]
     public async Task<ActionResult<CustomerActivityResponseDto>> GetById(int id)
     {
@@ -36,10 +35,10 @@ public class CustomerActivitiesController : ControllerBase{
         return Ok(activity);
     }
 
-    // POST: api/CustomerActivities
     [HttpPost]
     public async Task<ActionResult<CustomerActivityResponseDto>> Create(
-        CreateCustomerActivityDto dto){
+        CreateCustomerActivityDto dto)
+    {
         var activity = await _service.CreateAsync(dto);
 
         if (activity == null)
@@ -52,10 +51,11 @@ public class CustomerActivitiesController : ControllerBase{
         );
     }
 
-
-    // PUT: api/CustomerActivities/1
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> Update(int id,UpdateCustomerActivityDto dto){
+    public async Task<IActionResult> Update(
+        int id,
+        UpdateCustomerActivityDto dto)
+    {
         var updated = await _service.UpdateAsync(id, dto);
 
         if (!updated)
@@ -64,10 +64,9 @@ public class CustomerActivitiesController : ControllerBase{
         return NoContent();
     }
 
-
-    // DELETE: api/CustomerActivities/1
     [HttpDelete("{id:int}")]
-    public async Task<IActionResult> Delete(int id){
+    public async Task<IActionResult> Delete(int id)
+    {
         var deleted = await _service.DeleteAsync(id);
 
         if (!deleted)
