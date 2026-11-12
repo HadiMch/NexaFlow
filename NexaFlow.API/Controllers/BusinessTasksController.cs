@@ -5,41 +5,51 @@ using NexaFlow.API.Services;
 
 namespace NexaFlow.API.Controllers;
 
+/// <summary>
+/// Manages business tasks and task statistics.
+/// </summary>
+///
 [ApiController]
 [Route("api/[controller]")]
-public class BusinessTasksController : ControllerBase
-{
+public class BusinessTasksController : ControllerBase{
     private readonly BusinessTaskService _service;
     private readonly BusinessTaskStatsService _statsService;
 
-    public BusinessTasksController(
-        BusinessTaskService service,
-        BusinessTaskStatsService statsService)
-    {
+    public BusinessTasksController(BusinessTaskService service, BusinessTaskStatsService statsService){
         _service = service;
         _statsService = statsService;
     }
 
-    // GET: api/BusinessTasks
+    /// <summary>
+    /// Retrieves all business tasks.
+    /// </summary>
+
     [HttpGet]
-    public async Task<ActionResult<List<BusinessTaskResponseDto>>> GetAll()
-    {
+    [ProducesResponseType(typeof(List<BusinessTaskResponseDto>),StatusCodes.Status200OK)]
+    public async Task<ActionResult<List<BusinessTaskResponseDto>>> GetAll(){
         var tasks = await _service.GetAllAsync();
         return Ok(tasks);
     }
 
-    // GET: api/BusinessTasks/stats
+    /// <summary>
+    /// Retrieves task statistics.
+    /// </summary>
+
     [HttpGet("stats")]
-    public async Task<ActionResult<BusinessTaskStatsDto>> GetStats()
-    {
+    [ProducesResponseType(typeof(BusinessTaskStatsDto),StatusCodes.Status200OK)]
+    public async Task<ActionResult<BusinessTaskStatsDto>> GetStats(){
         var stats = await _statsService.GetStatsAsync();
         return Ok(stats);
     }
 
-    // GET: api/BusinessTasks/1
+    /// <summary>
+    /// Retrieves a business task by ID.
+    /// </summary>
+
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<BusinessTaskResponseDto>> GetById(int id)
-    {
+    [ProducesResponseType(typeof(BusinessTaskResponseDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<BusinessTaskResponseDto>> GetById(int id){
         var task = await _service.GetByIdAsync(id);
 
         if (task == null)
@@ -48,11 +58,14 @@ public class BusinessTasksController : ControllerBase
         return Ok(task);
     }
 
-    // POST: api/BusinessTasks
+    /// <summary>
+    /// Creates a new business task.
+    /// </summary>
+
     [HttpPost]
-    public async Task<ActionResult<BusinessTaskResponseDto>> Create(
-        CreateBusinessTaskDto dto)
-    {
+    [ProducesResponseType(typeof(BusinessTaskResponseDto),StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<BusinessTaskResponseDto>> Create([FromBody] CreateBusinessTaskDto dto){
         if (string.IsNullOrWhiteSpace(dto.Title))
             return BadRequest("Task title cannot be empty.");
 
@@ -65,12 +78,15 @@ public class BusinessTasksController : ControllerBase
         );
     }
 
-    // PUT: api/BusinessTasks/1
+    /// <summary>
+    /// Updates an existing business task.
+    /// </summary>
+
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> Update(
-        int id,
-        UpdateBusinessTaskDto dto)
-    {
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Update(int id,[FromBody] UpdateBusinessTaskDto dto){
         if (string.IsNullOrWhiteSpace(dto.Title))
             return BadRequest("Task title cannot be empty.");
 
@@ -82,15 +98,18 @@ public class BusinessTasksController : ControllerBase
         return NoContent();
     }
 
-    // DELETE: api/BusinessTasks/1
+    /// <summary>
+    /// Deletes a business task by ID.
+    /// </summary>
+
     [HttpDelete("{id:int}")]
-    public async Task<IActionResult> Delete(int id)
-    {
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Delete(int id){
         var deleted = await _service.DeleteAsync(id);
 
         if (!deleted)
             return NotFound();
-
         return NoContent();
     }
 }
