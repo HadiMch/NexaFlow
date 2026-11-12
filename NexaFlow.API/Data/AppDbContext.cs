@@ -4,7 +4,8 @@ using NexaFlow.API.Models;
 
 namespace NexaFlow.API.Data;
 
-public class AppDbContext : DbContext{
+public class AppDbContext : DbContext
+{
     public AppDbContext(DbContextOptions<AppDbContext> options)
         : base(options)
     {
@@ -15,19 +16,19 @@ public class AppDbContext : DbContext{
     public DbSet<Product> Products { get; set; }
 
     public DbSet<CustomerActivity> CustomerActivities { get; set; } = null!;
-    
+
     public DbSet<BusinessTask> BusinessTasks { get; set; } = null!;
 
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-       modelBuilder.Entity<CustomerActivity>()
-            .HasOne(a => a.Customer)
-            .WithMany(c => c.Activities)
-            .HasForeignKey(a => a.CustomerId)
-            .OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<CustomerActivity>()
+             .HasOne(a => a.Customer)
+             .WithMany(c => c.Activities)
+             .HasForeignKey(a => a.CustomerId)
+             .OnDelete(DeleteBehavior.Cascade);
     }
 
 }

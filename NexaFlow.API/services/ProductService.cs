@@ -6,23 +6,28 @@ using NexaFlow.API.Models;
 
 namespace NexaFlow.API.Services;
 
-public class ProductService{
-    
+public class ProductService
+{
+
     private readonly AppDbContext _context;
 
-    public ProductService(AppDbContext context){
+    public ProductService(AppDbContext context)
+    {
         _context = context;
     }
 
-    public async Task<List<Product>> GetAllAsync(){
+    public async Task<List<Product>> GetAllAsync()
+    {
         return await _context.Products.AsNoTracking().OrderBy(p => p.Id).ToListAsync();
     }
 
-    public async Task<Product?> GetByIdAsync(int id){
+    public async Task<Product?> GetByIdAsync(int id)
+    {
         return await _context.Products.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
     }
 
-    public async Task<Product> CreateAsync(CreateProductDto dto){
+    public async Task<Product> CreateAsync(CreateProductDto dto)
+    {
         var product = new Product
         {
             Name = dto.Name,
@@ -38,7 +43,8 @@ public class ProductService{
         return product;
     }
 
-    public async Task<bool> UpdateAsync(int id, UpdateProductDto dto){
+    public async Task<bool> UpdateAsync(int id, UpdateProductDto dto)
+    {
         var product = await _context.Products.FindAsync(id);
 
         if (product == null)
@@ -53,7 +59,8 @@ public class ProductService{
         return true;
     }
 
-    public async Task<bool> DeleteAsync(int id){
+    public async Task<bool> DeleteAsync(int id)
+    {
         var product = await _context.Products.FindAsync(id);
 
         if (product == null)
@@ -65,8 +72,9 @@ public class ProductService{
         return true;
     }
 
-    
-    public async Task<InventoryStatsDto> GetInventoryStatsAsync(){
+
+    public async Task<InventoryStatsDto> GetInventoryStatsAsync()
+    {
         var products = _context.Products.AsNoTracking();
 
         return new InventoryStatsDto

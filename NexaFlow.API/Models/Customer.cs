@@ -20,5 +20,5 @@ public class Customer
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-    public ICollection<CustomerActivity> Activities { get; set; }= new List<CustomerActivity>();
+    public ICollection<CustomerActivity> Activities { get; set; } = new List<CustomerActivity>();
 }

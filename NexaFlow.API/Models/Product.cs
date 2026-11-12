@@ -3,7 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NexaFlow.API.Models;
 
-public class Product{
+public class Product
+{
     public int Id { get; set; }
 
     [Required]

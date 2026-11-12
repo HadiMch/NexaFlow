@@ -11,5 +11,5 @@ public class PagedResultDto<T>
 
     public int PageSize { get; set; }
 
-    public int TotalPages =>PageSize > 0? (int)Math.Ceiling((double)TotalCount / PageSize): 0;
+    public int TotalPages => PageSize > 0 ? (int)Math.Ceiling((double)TotalCount / PageSize) : 0;
 }

@@ -8,22 +8,26 @@ namespace NexaFlow.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ProductsController : ControllerBase{
+public class ProductsController : ControllerBase
+{
     private readonly ProductService _productService;
 
-    public ProductsController(ProductService productService){
+    public ProductsController(ProductService productService)
+    {
         _productService = productService;
     }
 
 
     [HttpGet]
-    public async Task<ActionResult<List<Product>>> GetProducts(){
+    public async Task<ActionResult<List<Product>>> GetProducts()
+    {
         return Ok(await _productService.GetAllAsync());
     }
 
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<Product>> GetProductById(int id){
+    public async Task<ActionResult<Product>> GetProductById(int id)
+    {
         var product = await _productService.GetByIdAsync(id);
 
         if (product == null)
@@ -34,7 +38,8 @@ public class ProductsController : ControllerBase{
 
 
     [HttpPost]
-    public async Task<ActionResult<Product>> CreateProduct([FromBody] CreateProductDto dto){
+    public async Task<ActionResult<Product>> CreateProduct([FromBody] CreateProductDto dto)
+    {
         var product = await _productService.CreateAsync(dto);
 
         return CreatedAtAction(
@@ -46,7 +51,8 @@ public class ProductsController : ControllerBase{
 
 
     [HttpPut("{id:int}")]
-    public async Task<IActionResult> UpdateProduct(int id, [FromBody] UpdateProductDto dto){
+    public async Task<IActionResult> UpdateProduct(int id, [FromBody] UpdateProductDto dto)
+    {
         var updated = await _productService.UpdateAsync(id, dto);
 
         if (!updated)
@@ -57,7 +63,8 @@ public class ProductsController : ControllerBase{
 
 
     [HttpDelete("{id:int}")]
-    public async Task<IActionResult> DeleteProduct(int id){
+    public async Task<IActionResult> DeleteProduct(int id)
+    {
         var deleted = await _productService.DeleteAsync(id);
 
         if (!deleted)
@@ -66,12 +73,12 @@ public class ProductsController : ControllerBase{
         return NoContent();
     }
 
-    
+
     [HttpGet("stats")]
     public async Task<ActionResult<InventoryStatsDto>> GetInventoryStats()
     {
         var stats = await _productService.GetInventoryStatsAsync();
-     return Ok(stats);
+        return Ok(stats);
     }
 
 }

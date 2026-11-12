@@ -3,7 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NexaFlow.API.DTOs;
 
-public class CreateProductDto{
+public class CreateProductDto
+{
     [Required]
     [MaxLength(150)]
     public string Name { get; set; } = string.Empty;

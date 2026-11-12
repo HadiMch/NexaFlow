@@ -7,7 +7,8 @@ using NexaFlow.API.Services.AI;
 
 namespace NexaFlow.API.Services;
 
-public class GroqService{
+public class GroqService
+{
     private const string Endpoint = "https://api.groq.com/openai/v1/chat/completions";
     private const string DefaultModel = "openai/gpt-oss-20b";
     private readonly HttpClient _httpClient;
@@ -47,7 +48,7 @@ public class GroqService{
             max_completion_tokens = 1200
         };
 
-        using var request = new HttpRequestMessage( HttpMethod.Post, Endpoint);
+        using var request = new HttpRequestMessage(HttpMethod.Post, Endpoint);
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", apiKey);
 
         request.Content = JsonContent.Create(
@@ -69,7 +70,7 @@ public class GroqService{
                 response.StatusCode
             );
         }
-        using var stream =await response.Content.ReadAsStreamAsync();
+        using var stream = await response.Content.ReadAsStreamAsync();
         return await GroqResponseParser.ParseAsync(stream);
     }
 }
